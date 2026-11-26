@@ -135,6 +135,7 @@ const pillars = [
         <div class="teaser-actions">
           <a class="btn btn-primary" href={href('/forecast/')}>Open your forecast <span class="arrow">→</span></a>
           <span class="teaser-note">Free · Saved only in your browser</span>
+          <a class="teaser-link" href={href('/compatibility/')}>Marriage matching <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </div>
@@ -543,6 +544,18 @@ const pillars = [
     letter-spacing: 0.06em;
     color: var(--faint);
     white-space: nowrap;
+  }
+
+  .teaser-link {
+    font-size: 0.68rem;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold-line);
+    line-height: 1.3;
+    transition: color 0.2s ease;
+  }
+
+  .teaser-link:hover {
+    color: var(--gold-bright);
   }
 
   .marquee {

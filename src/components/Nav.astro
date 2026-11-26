@@ -8,6 +8,7 @@ const rel = path.startsWith(base) ? path.slice(base.length) || '/' : path;
 const links = [
   { href: '/chart/', label: 'Birth chart' },
   { href: '/forecast/', label: 'Forecast' },
+  { href: '/compatibility/', label: 'Matching' },
   { href: '/zodiac/', label: 'Zodiac' },
   { href: '/sky/', label: 'Sky now' },
   { href: '/learn/', label: 'Learn' },
@@ -154,7 +155,7 @@ const isActive = (target: string) => {
         if (event.key === 'Escape') setOpen(false);
       });
       window.addEventListener('resize', function () {
-        if (window.innerWidth > 900) setOpen(false);
+        if (window.innerWidth > 1100) setOpen(false);
       });
     });
   }
@@ -416,7 +417,7 @@ const isActive = (target: string) => {
     color: var(--faint);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
     .nav-links {
       display: none;
     }

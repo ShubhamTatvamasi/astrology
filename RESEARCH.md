@@ -233,6 +233,17 @@ Key choices:
 
 ---
 
+## 4c. Matching layer
+
+The marriage/partnership matching page is documented separately in [`MATCH_RESEARCH.md`](./MATCH_RESEARCH.md). It combines two distinct systems:
+
+- **Western synastry:** inter-chart major aspects, weighted pair contacts, five category indexes, and whole-sign house overlays.
+- **Vedic Ashtakoot Gun Milan:** Lahiri sidereal Moon nakshatras, eight kootas out of 36, traditional tables, role-sensitive order, and raw scores without cancellation rules.
+
+The UI keeps them visually and conceptually separate, marks time-unknown houses as approximate, and frames the result as a conversation map rather than a verdict. It does not make medical, fertility, genetic, or marital “yes/no” claims.
+
+---
+
 ## 5. Design and animation research
 
 ### 5.1 Visual direction
@@ -336,3 +347,7 @@ Platform:
 - [x] Forecast saved chart reloads and “Forget” removes it.
 - [x] Forecast today/week/month ranges change the aspects, life areas, and timeline.
 - [x] Forecast remains usable with an unknown birth time, with houses/rising marked approximate.
+- [x] Two-chart matching loads from forms, URL, and local storage; “Forget” removes saved charts.
+- [x] Synastry aspects, categories, and house overlays render for a real pair.
+- [x] Vedic Ashtakoot renders all eight kootas and dosha flags; role order can be switched.
+- [x] Matching is axe-clean on desktop and mobile in both themes.

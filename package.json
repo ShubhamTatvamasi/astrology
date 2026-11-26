@@ -1,7 +1,7 @@
 {
   "name": "astrology",
-  "version": "1.2.0",
-  "description": "Astra — a modern astrology web app with real birth charts, zodiac guides, and the live sky. Built with Astro + Svelte.",
+  "version": "1.3.0",
+  "description": "Astra \u2014 a modern astrology web app with real birth charts, zodiac guides, and the live sky. Built with Astro + Svelte.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

@@ -10,13 +10,14 @@ A static astrology web app built with **Astro + Svelte**. It calculates real bir
 
 - **Birth chart calculator** — Sun, Moon, rising sign, ten planets, the mean North Node, twelve houses, major aspects, element/modality balance, and a shareable chart URL.
 - **Personal forecast** — transits to your natal chart, with today/week/month ranges, life-area guidance, applying/exact dates, a 30-day timing timeline, moon phases, stations, and a journal prompt. Saved locally so it is ready next time.
+- **Marriage & partnership matching** — two-chart Western synastry (attraction, emotional safety, communication, commitment, shared direction), house overlays, key aspects, conversation prompts, plus a separate traditional Vedic Ashtakoot Gun Milan layer with 36-point koota breakdown and role order.
 - **Big three finder** — a fast birth-data form that returns Sun, Moon and rising, with a link into the full chart.
 - **Zodiac encyclopedia** — all twelve signs with dates, elements, modalities, rulers, strengths, shadow, love, career, friendship, compatibility, and traditional correspondences.
 - **Learn astrology** — planets, signs, houses, aspects, moon phases, methodology, and FAQ.
 - **Sky now** — live moon phase and illumination, current planetary positions, retrogrades, and the degree rising at your location.
 - **Light, dark, or system theme** — system is the default; the choice is remembered locally and applied before first paint to avoid a flash. Chart wheels stay dark so the glyphs remain legible.
 - **Animations** — a drifting starfield with pointer parallax, shooting stars, a rotating cosmic wheel, on-scroll reveals, animated chart wheels and aspect lines, and reduced-motion support.
-- **No account, no database** — chart calculations happen in the browser. Share links encode the birth data in the URL. The forecast can save your chart in `localStorage`; “Forget” removes it.
+- **No account, no database** — chart calculations happen in the browser. Share links encode the birth data in the URL. The forecast and matching pages can save charts in `localStorage`; “Forget” removes them.
 
 Routes (all static):
 
@@ -25,6 +26,7 @@ Routes (all static):
 | `/astrology/` | Home, big-three calculator, zodiac grid, guide |
 | `/astrology/chart/` | Full natal chart calculator |
 | `/astrology/forecast/` | Personal transit forecast and timing |
+| `/astrology/compatibility/` | Marriage & partnership matching |
 | `/astrology/zodiac/` | Filterable zodiac index |
 | `/astrology/zodiac/[sign]/` | Twelve sign profiles |
 | `/astrology/sky/` | Live sky and transits |
@@ -111,9 +113,9 @@ See [`RESEARCH.md`](./RESEARCH.md) for sources and design decisions.
 ```
 src/
   components/        # Astro + Svelte UI, chart wheel, starfield, forms
-  data/              # signs, planets, houses, aspects, moon phases, transit themes
+  data/              # signs, planets, houses, aspects, moon phases, transit themes, synastry, Vedic
   layouts/           # BaseLayout with SEO, nav, footer, starfield
-  lib/               # astronomy, transits, saved chart, time zones, geocoding
+  lib/               # astronomy, transits, synastry, Vedic matching, saved charts, time zones
   pages/             # routes (index, chart, zodiac, sky, learn, 404)
   styles/            # global design tokens and utilities
 public/              # favicon, OG image, manifest, robots
@@ -135,6 +137,17 @@ The forecast is deterministic and auditable — not an AI chatbot inventing a ho
 - Readings are composed from a controlled template system, not free-form generation.
 
 See [`FORECAST_RESEARCH.md`](./FORECAST_RESEARCH.md) for the market research, transit theory, ethics, and validation behind it.
+
+---
+
+## Matching methodology
+
+- **Western synastry:** both tropical charts, major inter-aspects, synastry orbs (conjunction 7°, sextile 5°, square 6°, trine 6°, opposition 7°), weighted pair contacts, five life-area indexes, and whole-sign house overlays.
+- **Vedic Ashtakoot Gun Milan:** separate Lahiri sidereal Moon layer, 27 nakshatras, 8 kootas out of 36, traditional tables, role-sensitive bride/groom order toggle, and raw scores without cancellation rules.
+- The two systems are not directly comparable and are labelled separately.
+- No compatibility report is a yes/no verdict. “Forget” removes both locally stored charts.
+
+See [`MATCH_RESEARCH.md`](./MATCH_RESEARCH.md) for the full research, tables, limitations, and ethics.
 
 ---
 
@@ -161,7 +174,7 @@ location.reload();
 
 Birth data is processed entirely in the browser. The only network request is the optional city search, which sends the typed place name to the [Open-Meteo geocoding API](https://open-meteo.com/). Nothing is stored on a server.
 
-The forecast stores one chart in `localStorage` under `astra-birth-chart-v1` so it can show your weather on return visits. Use **Forget** on the forecast page to remove it. A share link contains the birth data in its query string, so treat shared links accordingly.
+The forecast stores one chart in `localStorage` under `astra-birth-chart-v1`. The matching page stores the first chart under the same key and the partner chart under `astra-partner-chart-v1`. Use **Forget** to remove them. Share links contain birth data in the query string, so treat shared links accordingly.
 
 ---
 

@@ -13,10 +13,16 @@
   interface Props {
     initial?: BirthInitial | null;
     submitLabel?: string;
+    idPrefix?: string;
     onCalculate: (data: BirthData) => void;
   }
 
-  let { initial = null, submitLabel = 'Reveal my big three', onCalculate }: Props = $props();
+  let {
+    initial = null,
+    submitLabel = 'Reveal my big three',
+    idPrefix = 'birth',
+    onCalculate,
+  }: Props = $props();
 
   let date = $state(initial?.date ?? '');
   let time = $state(initial?.time ?? '');
@@ -32,7 +38,7 @@
   let utcOffset = $state<string | number>(String(initial?.utcOffset ?? ''));
   let error = $state('');
 
-  const inputId = 'birth-date';
+  const inputId = `${idPrefix}-date`;
 
   $effect(() => {
     const q = query.trim();
@@ -191,9 +197,9 @@
     </div>
 
     <div class="field">
-      <label for="birth-time">Birth time</label>
+      <label for={`${idPrefix}-time`}>Birth time</label>
       <input
-        id="birth-time"
+        id={`${idPrefix}-time`}
         class="input"
         type="time"
         bind:value={time}
@@ -228,9 +234,9 @@
     {#if manual}
       <div class="manual-grid">
         <div class="field">
-          <label for="birth-lat">Latitude</label>
+          <label for={`${idPrefix}-lat`}>Latitude</label>
           <input
-            id="birth-lat"
+            id={`${idPrefix}-lat`}
             class="input"
             type="number"
             step="0.0001"
@@ -241,9 +247,9 @@
           />
         </div>
         <div class="field">
-          <label for="birth-lon">Longitude</label>
+          <label for={`${idPrefix}-lon`}>Longitude</label>
           <input
-            id="birth-lon"
+            id={`${idPrefix}-lon`}
             class="input"
             type="number"
             step="0.0001"
@@ -254,9 +260,9 @@
           />
         </div>
         <div class="field">
-          <label for="birth-offset">UTC offset (hours)</label>
+          <label for={`${idPrefix}-offset`}>UTC offset (hours)</label>
           <input
-            id="birth-offset"
+            id={`${idPrefix}-offset`}
             class="input"
             type="number"
             step="0.25"
@@ -297,13 +303,13 @@
           </svg>
         </span>
         <input
-          id="birth-place"
+          id={`${idPrefix}-place`}
           class="input place-input"
           type="text"
           role="combobox"
           aria-label="Search for your birth city"
           aria-autocomplete="list"
-          aria-controls="place-results"
+          aria-controls={`${idPrefix}-place-results`}
           aria-expanded={results.length > 0}
           placeholder="Start typing a city — e.g. New Haven"
           bind:value={query}
@@ -315,7 +321,7 @@
       </div>
 
       {#if results.length > 0}
-        <ul class="place-results" id="place-results">
+        <ul class="place-results" id={`${idPrefix}-place-results`}>
           {#each results as place (place.id)}
             <li>
               <button type="button" onclick={() => choosePlace(place)}>

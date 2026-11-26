@@ -412,3 +412,22 @@ html[data-theme='light'] .forecast-hero {
 html[data-theme='light'] .transit-column {
   background: rgba(255, 255, 255, 0.35);
 }
+
+
+/* ---------- compatibility ---------- */
+
+html[data-theme='light'] .category-glyph,
+html[data-theme='light'] .cat-name .glyph,
+html[data-theme='light'] .cat-track span,
+html[data-theme='light'] .aspect-glyphs,
+html[data-theme='light'] .split-glyph,
+html[data-theme='light'] .overlay-item .glyph {
+  filter: brightness(0.7) saturate(1.15);
+}
+
+html[data-theme='light'] .hero {
+  background:
+    radial-gradient(500px 240px at 10% 10%, rgba(138, 92, 23, 0.08), transparent 65%),
+    radial-gradient(500px 260px at 90% 100%, rgba(109, 75, 214, 0.08), transparent 70%),
+    var(--card-bg);
+}
