@@ -1,7 +1,7 @@
 {
   "name": "Astra — Astrology, decoded",
   "short_name": "Astra",
-  "description": "A modern astrology companion: real birth charts, the zodiac, and the live sky.",
+  "description": "A modern astrology companion: real birth charts, personalized forecasts, the zodiac, and the live sky.",
   "start_url": "/astrology/",
   "scope": "/astrology/",
   "display": "standalone",

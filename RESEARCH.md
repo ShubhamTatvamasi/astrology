@@ -217,6 +217,22 @@ Retrograde copy follows the modern reflective interpretation rather than the “
 
 ---
 
+## 4b. The forecast layer
+
+The forecast is documented separately because it is a different product surface from the natal chart: current transits, life-area guidance, exact timing, stations, ingresses, moon phases, and a saved chart. It is deterministic and template-driven, not an AI horoscope. See [`FORECAST_RESEARCH.md`](./FORECAST_RESEARCH.md) for market research (AstroTalk, TimePassages, CHANI, Co-Star, The Pattern), transit theory, orbs, ethical boundaries, and the calculation pipeline.
+
+Key choices:
+
+- active transit orbs: conjunction 5°, sextile 3°, square 4°, trine 4°, opposition 5°;
+- applying aspects weighted higher; exact dates found by ephemeris sampling;
+- a wider 8° window only for aspects that become exact in the selected range;
+- five life areas, scored from transiting planet + natal point + transit house;
+- “weather” labels, not good/bad scores;
+- whole-sign houses; unknown birth time labeled approximate;
+- daily/weekly/monthly ranges, a 30-day timeline, and a local-only saved chart.
+
+---
+
 ## 5. Design and animation research
 
 ### 5.1 Visual direction
@@ -316,3 +332,7 @@ Platform:
 - [x] Light/dark preference survives reloads and client-side navigation.
 - [x] No theme flash on first paint when a preference is stored.
 - [x] Axe (WCAG 2.0/2.1 A/AA + best practice) is clean on every route in both themes.
+- [x] Forecast aspects, houses, applying/separating, exact dates, stations, ingresses, and moon phases validated against current ephemeris data.
+- [x] Forecast saved chart reloads and “Forget” removes it.
+- [x] Forecast today/week/month ranges change the aspects, life areas, and timeline.
+- [x] Forecast remains usable with an unknown birth time, with houses/rising marked approximate.

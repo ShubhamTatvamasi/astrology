@@ -388,3 +388,27 @@ html[data-theme='light'] .theme-switch button[aria-pressed='true'] {
   background: rgba(255, 255, 255, 0.72);
   box-shadow: 0 1px 4px rgba(55, 42, 18, 0.12);
 }
+
+
+/* ---------- forecast ---------- */
+
+html[data-theme='light'] .area-glyph,
+html[data-theme='light'] .signal-fill,
+html[data-theme='light'] .signal-bars span.on,
+html[data-theme='light'] .mini-aspect .glyph,
+html[data-theme='light'] .transit-glyphs,
+html[data-theme='light'] .timeline-glyph,
+html[data-theme='light'] .timeline-dot {
+  filter: brightness(0.7) saturate(1.15);
+}
+
+html[data-theme='light'] .forecast-hero {
+  background:
+    radial-gradient(600px 260px at 90% 10%, rgba(138, 92, 23, 0.08), transparent 65%),
+    radial-gradient(500px 260px at 10% 100%, rgba(109, 75, 214, 0.08), transparent 70%),
+    var(--card-bg);
+}
+
+html[data-theme='light'] .transit-column {
+  background: rgba(255, 255, 255, 0.35);
+}

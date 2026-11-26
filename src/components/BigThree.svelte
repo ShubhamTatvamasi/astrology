@@ -42,9 +42,9 @@
     return Math.round(((local - input.date.getTime()) / 3600_000) * 100) / 100;
   }
 
-  const chartHref = $derived.by(() => {
-    if (!data) return href('/chart/');
-    const params = new URLSearchParams({
+  const birthQuery = $derived.by(() => {
+    if (!data) return '';
+    return new URLSearchParams({
       d: data.localDate,
       t: data.localTime,
       lat: String(data.latitude),
@@ -53,9 +53,13 @@
       place: data.placeLabel,
       u: data.timeUnknown ? '1' : '0',
       off: String(offsetHours(data)),
-    });
-    return `${href('/chart/')}?${params.toString()}`;
+    }).toString();
   });
+
+  const chartHref = $derived(birthQuery ? `${href('/chart/')}?${birthQuery}` : href('/chart/'));
+  const forecastHref = $derived(
+    birthQuery ? `${href('/forecast/')}?${birthQuery}` : href('/forecast/'),
+  );
 
   const cards = $derived.by(() => {
     if (!chart || !data) return [];
@@ -121,7 +125,10 @@
             · {data.tzLabel}
           </p>
         </div>
-        <a class="btn btn-ghost btn-sm" href={chartHref}>Open full chart <span class="arrow">↗</span></a>
+        <div class="result-actions">
+          <a class="btn btn-ghost btn-sm" href={forecastHref}>Your forecast <span class="arrow">→</span></a>
+          <a class="btn btn-ghost btn-sm" href={chartHref}>Open full chart <span class="arrow">↗</span></a>
+        </div>
       </div>
 
       <div class="three-grid">
@@ -168,7 +175,10 @@
           This is a real chart calculated from the sky at your birth, not a date-range guess. The
           full chart adds houses, every planet, and the aspects between them.
         </p>
-        <a class="text-link" href={chartHref}>See the whole map <span aria-hidden="true">→</span></a>
+        <div class="foot-links">
+          <a class="text-link" href={forecastHref}>Daily forecast <span aria-hidden="true">→</span></a>
+          <a class="text-link" href={chartHref}>See the whole map <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   {/if}
@@ -221,6 +231,13 @@
     font-size: 0.76rem;
     letter-spacing: 0.04em;
     color: var(--faint);
+  }
+
+  .result-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
   }
 
   .three-grid {
@@ -343,6 +360,13 @@
     color: var(--gold-bright);
   }
 
+  .foot-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
   @keyframes result-in {
     from {
       opacity: 0;
@@ -355,7 +379,14 @@
   }
 
   @media (max-width: 900px) {
-    .three-grid {
+    .result-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .three-grid {
       grid-template-columns: 1fr;
     }
     .three-card {

@@ -153,7 +153,7 @@ export function ascendantAndMC(date: Date, latitude: number, longitude: number) 
   return { asc, mc, lst };
 }
 
-function houseFor(longitude: number, asc: number, houseSystem: HouseSystem): number {
+export function houseFor(longitude: number, asc: number, houseSystem: HouseSystem): number {
   if (houseSystem === 'equal') {
     return (Math.floor(norm360(longitude - asc) / 30) % 12) + 1;
   }

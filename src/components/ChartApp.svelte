@@ -32,6 +32,10 @@
     }
   });
 
+  const forecastHref = $derived(
+    data ? `${href('/forecast/')}?${searchFromBirth(data, 'whole')}` : href('/forecast/'),
+  );
+
   const chart = $derived(
     data
       ? computeChart({
@@ -160,6 +164,7 @@
           </p>
         </div>
         <div class="result-actions">
+          <a class="btn btn-ghost btn-sm" href={forecastHref}>Your forecast <span class="arrow">→</span></a>
           <button class="btn btn-ghost btn-sm" type="button" onclick={copyLink} aria-live="polite">
             {copied ? 'Link copied ✓' : 'Share chart'}
           </button>

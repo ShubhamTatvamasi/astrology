@@ -9,13 +9,14 @@ A static astrology web app built with **Astro + Svelte**. It calculates real bir
 ## What it does
 
 - **Birth chart calculator** — Sun, Moon, rising sign, ten planets, the mean North Node, twelve houses, major aspects, element/modality balance, and a shareable chart URL.
+- **Personal forecast** — transits to your natal chart, with today/week/month ranges, life-area guidance, applying/exact dates, a 30-day timing timeline, moon phases, stations, and a journal prompt. Saved locally so it is ready next time.
 - **Big three finder** — a fast birth-data form that returns Sun, Moon and rising, with a link into the full chart.
 - **Zodiac encyclopedia** — all twelve signs with dates, elements, modalities, rulers, strengths, shadow, love, career, friendship, compatibility, and traditional correspondences.
 - **Learn astrology** — planets, signs, houses, aspects, moon phases, methodology, and FAQ.
 - **Sky now** — live moon phase and illumination, current planetary positions, retrogrades, and the degree rising at your location.
 - **Light, dark, or system theme** — system is the default; the choice is remembered locally and applied before first paint to avoid a flash. Chart wheels stay dark so the glyphs remain legible.
 - **Animations** — a drifting starfield with pointer parallax, shooting stars, a rotating cosmic wheel, on-scroll reveals, animated chart wheels and aspect lines, and reduced-motion support.
-- **No account, no database** — chart calculations happen in the browser. Share links encode the birth data in the URL.
+- **No account, no database** — chart calculations happen in the browser. Share links encode the birth data in the URL. The forecast can save your chart in `localStorage`; “Forget” removes it.
 
 Routes (all static):
 
@@ -23,6 +24,7 @@ Routes (all static):
 | --- | --- |
 | `/astrology/` | Home, big-three calculator, zodiac grid, guide |
 | `/astrology/chart/` | Full natal chart calculator |
+| `/astrology/forecast/` | Personal transit forecast and timing |
 | `/astrology/zodiac/` | Filterable zodiac index |
 | `/astrology/zodiac/[sign]/` | Twelve sign profiles |
 | `/astrology/sky/` | Live sky and transits |
@@ -109,14 +111,30 @@ See [`RESEARCH.md`](./RESEARCH.md) for sources and design decisions.
 ```
 src/
   components/        # Astro + Svelte UI, chart wheel, starfield, forms
-  data/              # signs, planets, houses, aspects, moon phases
+  data/              # signs, planets, houses, aspects, moon phases, transit themes
   layouts/           # BaseLayout with SEO, nav, footer, starfield
-  lib/               # astronomy, time zones, geocoding, URL helpers
+  lib/               # astronomy, transits, saved chart, time zones, geocoding
   pages/             # routes (index, chart, zodiac, sky, learn, 404)
   styles/            # global design tokens and utilities
 public/              # favicon, OG image, manifest, robots
 .github/workflows/   # GitHub Pages deployment
 ```
+
+---
+
+## Forecast methodology
+
+The forecast is deterministic and auditable — not an AI chatbot inventing a horoscope.
+
+- Current transiting planets are compared to the natal Sun–Pluto, North Node, Ascendant, and Midheaven.
+- Active transit orbs: conjunction 5°, sextile 3°, square 4°, trine 4°, opposition 5°. A wider 8° look only includes aspects that become exact within the selected range.
+- Applying aspects are weighted slightly higher; exact dates come from sampling the ephemeris and finding the closest approach within 0.3°.
+- Life areas are scored from the transiting planet, natal point, and transit house, then given a “weather” label and a next step.
+- The timeline includes exact aspects, stations, ingresses, and moon phases.
+- Whole-sign houses are used; unknown birth times are clearly marked as approximate.
+- Readings are composed from a controlled template system, not free-form generation.
+
+See [`FORECAST_RESEARCH.md`](./FORECAST_RESEARCH.md) for the market research, transit theory, ethics, and validation behind it.
 
 ---
 
@@ -141,7 +159,9 @@ location.reload();
 
 ## Privacy
 
-Birth data is processed entirely in the browser. The only network request is the optional city search, which sends the typed place name to the [Open-Meteo geocoding API](https://open-meteo.com/). Nothing is stored on a server. A share link contains the birth data in its query string, so treat shared links accordingly.
+Birth data is processed entirely in the browser. The only network request is the optional city search, which sends the typed place name to the [Open-Meteo geocoding API](https://open-meteo.com/). Nothing is stored on a server.
+
+The forecast stores one chart in `localStorage` under `astra-birth-chart-v1` so it can show your weather on return visits. Use **Forget** on the forecast page to remove it. A share link contains the birth data in its query string, so treat shared links accordingly.
 
 ---
 

@@ -1,0 +1,292 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ForecastApp from '../components/ForecastApp.svelte';
+import { href } from '../lib/url';
+---
+
+<BaseLayout
+  title="Personal forecast — transits, timing & guidance"
+  description="A personalized astrology forecast based on transits to your natal chart. Daily, weekly, and monthly guidance for love, work, mind, wellbeing, and growth — with exact dates and a clear methodology."
+>
+  <section class="forecast-page-hero">
+    <div class="hero-orbit" aria-hidden="true">
+      <span class="orbit-ring"></span>
+      <span class="orbit-ring inner"></span>
+      <span class="orbit-core">✦</span>
+    </div>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Personal forecast</p>
+        <h1 class="display h1">
+          The sky is talking<br />
+          <em class="gold">to your chart.</em>
+        </h1>
+        <p class="lede">
+          Not a generic sun-sign horoscope. Astra compares the planets in the sky right now to the
+          planets at your birth, then translates the transits into weather for your actual life:
+          love, work, mind, body, and growth.
+        </p>
+        <div class="hero-chips">
+          <span class="chip chip--gold">Real transits</span>
+          <span class="chip">Today · week · month</span>
+          <span class="chip">Exact dates</span>
+          <span class="chip">Saved locally</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#forecast-start">Open my forecast <span class="arrow">→</span></a>
+          <a class="btn btn-ghost" href={href('/learn/#method')}>How it works</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section--tight" id="forecast-start">
+    <div class="container">
+      <ForecastApp client:load />
+    </div>
+  </section>
+
+  <section class="section--tight forecast-method-section" id="forecast-method">
+    <div class="container method-grid">
+      <div class="method-intro">
+        <p class="kicker">Method</p>
+        <h2 class="display method-title">Real transits.<br /><em class="gold">Tight orbs.</em></h2>
+        <p class="method-lede">
+          A forecast is only personal when it is calculated from your chart. Astra compares the
+          moving sky to your natal points, then shows the timing instead of pretending to know the
+          outcome.
+        </p>
+      </div>
+      <div class="method-detail">
+        <div class="method-fact">
+          <span class="method-num">01</span>
+          <div>
+            <h3>Your chart is the lens</h3>
+            <p>
+              Transiting Sun–Pluto are compared to your natal Sun, Moon, planets, Node, Ascendant,
+              and Midheaven. Whole-sign houses are used; an unknown birth time is labeled
+              approximate.
+            </p>
+          </div>
+        </div>
+        <div class="method-fact">
+          <span class="method-num">02</span>
+          <div>
+            <h3>The timing is real</h3>
+            <p>
+              Active orbs are conjunction 5°, sextile 3°, square 4°, trine 4°, opposition 5°.
+              Applying aspects are weighted higher, and exact dates come from ephemeris sampling —
+              not a guess.
+            </p>
+          </div>
+        </div>
+        <div class="method-fact">
+          <span class="method-num">03</span>
+          <div>
+            <h3>Weather, not fate</h3>
+            <p>
+              A “quiet” area stays quiet. A square is friction, not punishment. Use the forecast to
+              make a more conscious choice; do not outsource your decisions to it.
+            </p>
+          </div>
+        </div>
+        <div class="method-links">
+          <a class="btn btn-ghost btn-sm" href={href('/learn/#method')}>Astrology basics <span class="arrow">→</span></a>
+          <a
+            class="btn btn-ghost btn-sm"
+            href="https://github.com/ShubhamTatvamasi/astrology/blob/main/FORECAST_RESEARCH.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Full forecast research ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .forecast-page-hero {
+    position: relative;
+    padding: 8.5rem 0 1.5rem;
+    overflow: hidden;
+  }
+
+  .hero-orbit {
+    position: absolute;
+    top: 48%;
+    right: 2%;
+    width: min(540px, 44vw);
+    aspect-ratio: 1;
+    transform: translateY(-50%);
+    border: 1px solid var(--line-soft);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    inset: 15%;
+    border: 1px dashed var(--gold-line);
+    border-radius: 50%;
+    animation: spin 90s linear infinite;
+  }
+
+  .orbit-ring.inner {
+    inset: 33%;
+    border-style: solid;
+    border-color: var(--line-soft);
+    animation: spin 55s linear infinite reverse;
+  }
+
+  .orbit-core {
+    position: absolute;
+    inset: 43%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--gold-line);
+    border-radius: 50%;
+    color: var(--gold);
+    background: var(--card-bg);
+    box-shadow: 0 0 50px -15px var(--gold);
+    font-size: 1.2rem;
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .h1 {
+    margin-top: 1rem;
+    font-size: clamp(3.4rem, 7.2vw, 6.2rem);
+  }
+
+  .lede {
+    margin-top: 1.2rem;
+    max-width: 55ch;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.3rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+
+
+
+
+
+
+  .section--tight {
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(4rem, 8vw, 6rem);
+    scroll-margin-top: 100px;
+  }
+
+  .forecast-method-section {
+    padding-top: clamp(2rem, 4vw, 3rem);
+    padding-bottom: clamp(4rem, 8vw, 6rem);
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .method-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .method-title {
+    margin-top: 0.5rem;
+    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+  }
+
+  .method-lede {
+    margin-top: 1rem;
+    max-width: 40ch;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .method-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .method-fact {
+    display: flex;
+    gap: 0.9rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .method-num {
+    font-family: var(--font-serif);
+    color: var(--gold);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  .method-fact h3 {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .method-fact p {
+    margin-top: 0.25rem;
+    font-size: 0.73rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .method-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-top: 0.2rem;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .hero-grid,
+    .method-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-orbit {
+      right: -20%;
+      opacity: 0.4;
+    }
+    .h1 {
+      font-size: clamp(3.2rem, 10vw, 5.2rem);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .forecast-page-hero {
+      padding-top: 7.4rem;
+    }
+    .hero-orbit {
+      display: none;
+    }
+  }
+</style>

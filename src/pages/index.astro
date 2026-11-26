@@ -119,6 +119,27 @@ const pillars = [
     </div>
   </section>
 
+  <section class="section--tight forecast-teaser-section">
+    <div class="container">
+      <div class="forecast-teaser card reveal">
+        <span class="teaser-mark glyph" aria-hidden="true">✦</span>
+        <div class="teaser-copy">
+          <p class="kicker">Beyond the big three</p>
+          <h2 class="h3">Your chart, translated into <em class="gold">your week.</em></h2>
+          <p>
+            The planets keep moving. Your forecast compares the sky right now to your birth chart,
+            then turns the transits into daily weather for love, work, mind, body, and growth — with
+            the dates that matter.
+          </p>
+        </div>
+        <div class="teaser-actions">
+          <a class="btn btn-primary" href={href('/forecast/')}>Open your forecast <span class="arrow">→</span></a>
+          <span class="teaser-note">Free · Saved only in your browser</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
       {[0, 1].map(() => (
@@ -456,6 +477,72 @@ const pillars = [
 
   .form-footnote span {
     color: var(--gold);
+  }
+
+  .forecast-teaser-section {
+    padding-top: 1rem;
+    padding-bottom: clamp(3rem, 6vw, 4rem);
+  }
+
+  .forecast-teaser {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding: clamp(1.2rem, 3vw, 1.8rem);
+    background:
+      radial-gradient(500px 200px at 12% 0%, var(--gold-tint), transparent 70%),
+      radial-gradient(500px 240px at 90% 100%, var(--glow-violet), transparent 70%),
+      var(--card-bg);
+  }
+
+  .teaser-mark {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--gold-line);
+    color: var(--gold);
+    background: var(--gold-tint);
+    font-size: 1.05rem;
+  }
+
+  .teaser-copy {
+    min-width: 0;
+  }
+
+  .teaser-copy .h3 {
+    margin-top: 0.3rem;
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+  }
+
+  .teaser-copy .h3 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .teaser-copy p:last-child {
+    margin-top: 0.4rem;
+    max-width: 66ch;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .teaser-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.45rem;
+    flex-shrink: 0;
+  }
+
+  .teaser-note {
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+    white-space: nowrap;
   }
 
   .marquee {
@@ -798,6 +885,20 @@ const pillars = [
     flex-wrap: wrap;
     gap: 0.7rem;
     margin-top: 1.8rem;
+  }
+
+  @media (max-width: 900px) {
+    .forecast-teaser {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .teaser-actions {
+      align-items: flex-start;
+      width: 100%;
+    }
+    .teaser-actions .btn {
+      width: 100%;
+    }
   }
 
   @media (max-width: 1050px) {
