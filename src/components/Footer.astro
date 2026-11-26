@@ -1,0 +1,192 @@
+---
+import { href } from '../lib/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href={href('/')} aria-label="Astra — home">
+          <span class="mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="13.2" stroke="currentColor" stroke-width="1.1" opacity=".5" />
+              <ellipse cx="16" cy="16" rx="13.2" ry="5.4" stroke="currentColor" stroke-width="1.1" opacity=".7" transform="rotate(-28 16 16)" />
+              <circle cx="16" cy="16" r="5.1" fill="currentColor" />
+              <circle cx="27.4" cy="9.4" r="1.7" fill="currentColor" />
+            </svg>
+          </span>
+          <span class="brand-name">Astra</span>
+        </a>
+        <p class="footer-tagline">A symbolic map of you, calculated from the sky you were born under.</p>
+        <p class="footer-note">Made with Astro + Svelte. Ephemeris by Astronomy Engine.</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <p class="footer-heading">Explore</p>
+          <a href={href('/chart/')}>Birth chart</a>
+          <a href={href('/zodiac/')}>The zodiac</a>
+          <a href={href('/sky/')}>Sky now</a>
+          <a href={href('/learn/')}>Learn astrology</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-heading">The basics</p>
+          <a href={href('/learn/#planets')}>Planets</a>
+          <a href={href('/learn/#houses')}>Houses</a>
+          <a href={href('/learn/#aspects')}>Aspects</a>
+          <a href={href('/learn/#moon-phases')}>Moon phases</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-heading">Elsewhere</p>
+          <a href="https://github.com/shubhamtatvamasi" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href="https://www.astro.build" target="_blank" rel="noopener noreferrer">Astro ↗</a>
+          <a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {year} Astra. A project by Shubham Tatvamasi.</p>
+      <p class="footer-disclaimer">
+        Astrology is a symbolic language, not a science. Use it for reflection, not prediction or
+        professional advice.
+      </p>
+      <a class="top-link" href="#top">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: clamp(4rem, 9vw, 8rem);
+    padding: clamp(3rem, 6vw, 5rem) 0 2rem;
+    border-top: 1px solid var(--line-soft);
+    background: linear-gradient(180deg, rgba(10, 11, 22, 0.2), rgba(5, 6, 13, 0.85));
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .mark {
+    width: 36px;
+    height: 36px;
+    color: var(--gold);
+  }
+
+  .mark svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand-name {
+    font-family: var(--font-serif);
+    font-size: 1.9rem;
+  }
+
+  .footer-tagline {
+    margin-top: 1rem;
+    max-width: 34ch;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .footer-note {
+    margin-top: 1.2rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .footer-heading {
+    margin-bottom: 0.35rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .footer-col a {
+    font-size: 0.88rem;
+    color: var(--muted);
+    transition: color 0.2s ease;
+  }
+
+  .footer-col a:hover {
+    color: var(--ink);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line-soft);
+    font-size: 0.74rem;
+    color: var(--faint);
+  }
+
+  .footer-disclaimer {
+    max-width: 52ch;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .top-link {
+    color: var(--muted);
+    transition: color 0.2s ease;
+  }
+
+  .top-link:hover {
+    color: var(--gold);
+  }
+
+  @media (max-width: 800px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer-cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+    }
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer-disclaimer {
+      text-align: left;
+    }
+  }
+</style>

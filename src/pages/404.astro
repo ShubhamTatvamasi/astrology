@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/url';
+---
+
+<BaseLayout
+  title="Lost in the sky — 404"
+  description="This page has drifted out of orbit."
+  noindex
+>
+  <section class="not-found">
+    <div class="container inner">
+      <p class="eyebrow">404 · Out of orbit</p>
+      <h1 class="display h1">Lost in<br /><em class="gold">the sky.</em></h1>
+      <p class="lede">
+        This page has drifted beyond the chart. The stars are still where you left them — try one of
+        these instead.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href={href('/')}>Return home <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href={href('/chart/')}>Cast your chart</a>
+        <a class="btn btn-ghost" href={href('/zodiac/')}>Browse the zodiac</a>
+      </div>
+      <span class="glyph float-glyph" aria-hidden="true">♆</span>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 85svh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 0 4rem;
+  }
+
+  .inner {
+    position: relative;
+  }
+
+  .h1 {
+    margin-top: 1rem;
+    font-size: clamp(4rem, 10vw, 8rem);
+  }
+
+  .lede {
+    margin-top: 1.2rem;
+    max-width: 48ch;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.8rem;
+  }
+
+  .float-glyph {
+    position: absolute;
+    top: -4rem;
+    right: 5%;
+    font-size: clamp(8rem, 20vw, 18rem);
+    color: var(--gold);
+    opacity: 0.06;
+    animation: float-y 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+</style>

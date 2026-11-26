@@ -1,0 +1,351 @@
+---
+import { SIGNS } from '../data/signs';
+
+const CX = 320;
+const CY = 320;
+const R_OUTER = 294;
+const R_SIGN_IN = 248;
+const R_GLYPH = 271;
+
+const elementFill: Record<string, string> = {
+  Fire: 'rgba(255, 138, 92, 0.09)',
+  Earth: 'rgba(127, 207, 157, 0.08)',
+  Air: 'rgba(143, 184, 255, 0.085)',
+  Water: 'rgba(183, 157, 255, 0.09)',
+};
+
+function angleFor(longitude: number): number {
+  return 180 - longitude;
+}
+
+function point(longitude: number, radius: number) {
+  const a = (angleFor(longitude) * Math.PI) / 180;
+  return { x: (CX + radius * Math.cos(a)).toFixed(2), y: (CY + radius * Math.sin(a)).toFixed(2) };
+}
+
+function sector(start: number, r1: number, r2: number) {
+  const a = point(start, r1);
+  const b = point(start + 30, r1);
+  const c = point(start + 30, r2);
+  const d = point(start, r2);
+  return `M ${a.x} ${a.y} A ${r1} ${r1} 0 0 0 ${b.x} ${b.y} L ${c.x} ${c.y} A ${r2} ${r2} 0 0 1 ${d.x} ${d.y} Z`;
+}
+
+const planets = [
+  { lon: 63, glyph: '☿', color: '#9fc7ff', label: 'Mercury', r: 196 },
+  { lon: 103, glyph: '☉', color: '#f2c56b', label: 'Sun', r: 196 },
+  { lon: 129, glyph: '♀', color: '#f3a7b8', label: 'Venus', r: 214 },
+  { lon: 159, glyph: '♂', color: '#ff6b4a', label: 'Mars', r: 196 },
+  { lon: 196, glyph: '☽', color: '#d8d6ef', label: 'Moon', r: 214 },
+  { lon: 237, glyph: '♇', color: '#a33a5b', label: 'Pluto', r: 196 },
+  { lon: 261, glyph: '♃', color: '#c9a0ff', label: 'Jupiter', r: 214 },
+  { lon: 282, glyph: '♄', color: '#8d99ae', label: 'Saturn', r: 196 },
+  { lon: 338, glyph: '♆', color: '#73c9c4', label: 'Neptune', r: 214 },
+];
+
+const aspectPairs = [
+  { a: 63, b: 159, color: 'rgba(255, 138, 92, 0.32)' },
+  { a: 103, b: 196, color: 'rgba(159, 199, 255, 0.3)' },
+  { a: 129, b: 261, color: 'rgba(232, 196, 124, 0.26)' },
+  { a: 159, b: 282, color: 'rgba(201, 160, 255, 0.3)' },
+  { a: 196, b: 338, color: 'rgba(127, 207, 157, 0.28)' },
+  { a: 237, b: 63, color: 'rgba(243, 167, 184, 0.24)' },
+];
+---
+
+<div class="cosmic-wheel" aria-hidden="true">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+  <svg class="wheel-svg" viewBox="0 0 640 640" fill="none">
+    <defs>
+      <radialGradient id="hero-core" cx="42%" cy="38%" r="62%">
+        <stop offset="0%" stop-color="#fff6de" />
+        <stop offset="34%" stop-color="#f0d296" />
+        <stop offset="72%" stop-color="#b8893f" />
+        <stop offset="100%" stop-color="#5c3f17" />
+      </radialGradient>
+      <radialGradient id="hero-halo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#e8c47c" stop-opacity=".5" />
+        <stop offset="55%" stop-color="#e8c47c" stop-opacity=".12" />
+        <stop offset="100%" stop-color="#e8c47c" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="hero-arc" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#e8c47c" stop-opacity=".05" />
+        <stop offset="50%" stop-color="#f7e3b0" stop-opacity=".7" />
+        <stop offset="100%" stop-color="#8b6cf6" stop-opacity=".2" />
+      </linearGradient>
+      <filter id="hero-blur" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" />
+      </filter>
+    </defs>
+
+    <circle cx="320" cy="320" r="314" stroke="rgba(232,196,124,.12)" stroke-width=".8" stroke-dasharray="1 10" class="spin-slow" />
+    <circle cx="320" cy="320" r="206" stroke="rgba(255,255,255,.07)" />
+    <circle cx="320" cy="320" r="248" stroke="rgba(255,255,255,.09)" />
+
+    <g class="sign-ring">
+      {SIGNS.map((sign, i) => {
+        const start = i * 30;
+        const mid = start + 15;
+        const p = point(mid, R_GLYPH);
+        return (
+          <g>
+            <path d={sector(start, R_OUTER, R_SIGN_IN)} fill={elementFill[sign.element]} />
+            <line
+              x1={point(start, R_SIGN_IN).x}
+              y1={point(start, R_SIGN_IN).y}
+              x2={point(start, R_OUTER).x}
+              y2={point(start, R_OUTER).y}
+              stroke="rgba(255,255,255,.08)"
+              stroke-width=".8"
+            />
+            <text
+              x={p.x}
+              y={p.y}
+              text-anchor="middle"
+              dominant-baseline="central"
+              fill="rgba(237,234,246,.82)"
+              font-size="22"
+              class="z-glyph"
+            >
+              {sign.glyph}
+            </text>
+          </g>
+        );
+      })}
+      <circle cx="320" cy="320" r={R_OUTER} stroke="rgba(232,196,124,.17)" />
+      <circle cx="320" cy="320" r={R_SIGN_IN} stroke="rgba(232,196,124,.1)" />
+    </g>
+
+    <g class="aspects">
+      {aspectPairs.map((pair, i) => {
+        const a = point(pair.a, 148);
+        const b = point(pair.b, 148);
+        return (
+          <line
+            x1={a.x}
+            y1={a.y}
+            x2={b.x}
+            y2={b.y}
+            stroke={pair.color}
+            stroke-width={i % 2 === 0 ? 1 : 0.8}
+            stroke-dasharray={i % 3 === 0 ? '1 5' : undefined}
+          />
+        );
+      })}
+      <circle cx="320" cy="320" r="148" stroke="rgba(255,255,255,.08)" stroke-dasharray="2 8" />
+      <circle cx="320" cy="320" r="96" stroke="rgba(232,196,124,.12)" />
+    </g>
+
+    <g class="orbit">
+      <circle cx="320" cy="320" r="232" stroke="rgba(201,184,255,.13)" stroke-dasharray="1 7" />
+      <circle cx="552" cy="320" r="3.4" fill="#f7e3b0" />
+      <circle cx="88" cy="320" r="2.2" fill="#c9b8ff" />
+      <circle cx="320" cy="552" r="2.6" fill="#9fc7ff" />
+    </g>
+
+    <g class="planets">
+      {planets.map((planet, i) => {
+        const p = point(planet.lon, planet.r);
+        const tick = point(planet.lon, R_SIGN_IN - 2);
+        const label = point(planet.lon, planet.r - 15);
+        return (
+          <g class="planet-float" style={`--delay:${i * 0.55}s`}>
+            <line
+              x1={tick.x}
+              y1={tick.y}
+              x2={p.x}
+              y2={p.y}
+              stroke={planet.color}
+              stroke-opacity=".28"
+              stroke-width=".8"
+            />
+            <circle cx={tick.x} cy={tick.y} r="2" fill={planet.color} />
+            <circle cx={p.x} cy={p.y} r="14" fill="rgba(8,9,18,.82)" stroke="rgba(255,255,255,.07)" />
+            <text
+              x={p.x}
+              y={p.y}
+              text-anchor="middle"
+              dominant-baseline="central"
+              fill={planet.color}
+              font-size="17"
+              class="p-glyph"
+            >
+              {planet.glyph}
+            </text>
+            <text
+              x={label.x}
+              y={label.y}
+              text-anchor="middle"
+              dominant-baseline="central"
+              fill="rgba(237,234,246,.42)"
+              font-size="6.2"
+              class="p-label"
+            >
+              {planet.label.toUpperCase()}
+            </text>
+          </g>
+        );
+      })}
+    </g>
+
+    <g class="angles">
+      <line x1="26" y1="320" x2="12" y2="320" stroke="#e8c47c" stroke-opacity=".6" stroke-width="1.2" />
+      <text x="295" y="450" text-anchor="middle" fill="#e8c47c" font-size="8" class="angle-label">ASC</text>
+      <line x1="320" y1="26" x2="320" y2="12" stroke="#e8c47c" stroke-opacity=".4" stroke-width="1.2" />
+      <text x="320" y="8" text-anchor="middle" fill="#e8c47c" font-size="8" class="angle-label">MC</text>
+    </g>
+
+    <g class="core">
+      <circle cx="320" cy="320" r="118" fill="url(#hero-halo)" class="breathe" />
+      <circle cx="320" cy="320" r="62" fill="url(#hero-core)" filter="url(#hero-blur)" opacity=".55" />
+      <circle cx="320" cy="320" r="54" fill="url(#hero-core)" />
+      <circle cx="320" cy="320" r="54" stroke="rgba(255,246,222,.5)" stroke-width=".8" />
+      <path
+        d="M298 285c18 2 34 16 38 34 3 14-2 28-12 37 5-12 6-25 1-37-6-14-17-24-31-29 1-2 2-4 4-5Z"
+        fill="rgba(255,246,222,.18)"
+      />
+      <circle cx="303" cy="306" r="3" fill="rgba(255,246,222,.6)" />
+      <circle cx="339" cy="339" r="1.8" fill="rgba(255,246,222,.4)" />
+    </g>
+
+    <g class="sparkles" fill="#f7e3b0">
+      <circle cx="212" cy="120" r="1.4" opacity=".6" />
+      <circle cx="508" cy="178" r="1.1" opacity=".5" />
+      <circle cx="462" cy="502" r="1.5" opacity=".45" />
+      <circle cx="148" cy="446" r="1.2" opacity=".5" />
+      <circle cx="556" cy="392" r="1" opacity=".4" />
+    </g>
+  </svg>
+  <div class="ring-glow"></div>
+</div>
+
+<style>
+  .cosmic-wheel {
+    position: relative;
+    width: 100%;
+    max-width: 660px;
+    margin-inline: auto;
+    aspect-ratio: 1;
+    isolation: isolate;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .glow-a {
+    inset: 12%;
+    background: radial-gradient(circle, rgba(139, 108, 246, 0.22), transparent 65%);
+    animation: glow-pulse 9s ease-in-out infinite;
+  }
+
+  .glow-b {
+    inset: 26%;
+    background: radial-gradient(circle, rgba(232, 196, 124, 0.16), transparent 68%);
+    animation: glow-pulse 7s ease-in-out infinite reverse;
+  }
+
+  .z-glyph {
+    font-family: var(--font-glyph);
+  }
+
+  .p-glyph {
+    font-family: var(--font-glyph);
+  }
+
+  .p-label {
+    font-family: var(--font-sans);
+    letter-spacing: 0.6px;
+  }
+
+  .angle-label {
+    font-family: var(--font-sans);
+    letter-spacing: 2px;
+  }
+
+  .wheel-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    animation: wheel-in 1.6s var(--ease) both;
+  }
+
+  .spin-slow {
+    transform-origin: 320px 320px;
+    animation: spin-hero 120s linear infinite;
+  }
+
+  .orbit {
+    transform-origin: 320px 320px;
+    animation: spin-hero 70s linear infinite;
+  }
+
+  .breathe {
+    transform-origin: 320px 320px;
+    animation: breathe 6s ease-in-out infinite;
+  }
+
+  .planet-float {
+    animation: float 7s ease-in-out infinite;
+    animation-delay: var(--delay);
+    transform-origin: 320px 320px;
+  }
+
+  @keyframes wheel-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92) rotate(-4deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes spin-hero {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.95;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  .ring-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 120px -40px rgba(232, 196, 124, 0.35) inset;
+    pointer-events: none;
+  }
+
+  @media (max-width: 700px) {
+    .cosmic-wheel {
+      max-width: 520px;
+    }
+  }
+</style>

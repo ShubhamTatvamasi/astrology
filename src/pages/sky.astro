@@ -1,0 +1,248 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SkyApp from '../components/SkyApp.svelte';
+import { href } from '../lib/url';
+---
+
+<BaseLayout
+  title="Sky now — live moon phase, retrogrades & planetary positions"
+  description="The live sky, calculated in your browser: current moon phase and illumination, planetary positions in the zodiac, retrograde planets, and what is rising right now."
+>
+  <section class="sky-hero">
+    <div class="hero-orbit" aria-hidden="true">
+      <span class="orbit-dot d1"></span>
+      <span class="orbit-dot d2"></span>
+      <span class="orbit-dot d3"></span>
+      <span class="orbit-dot d4"></span>
+    </div>
+    <div class="container hero-copy">
+      <p class="eyebrow live"><span class="live-pulse" aria-hidden="true"></span> Live from your browser</p>
+      <h1 class="display h1">
+        The sky<br />
+        <em class="gold">right now.</em>
+      </h1>
+      <p class="lede">
+        Where the Moon is, what phase it is in, which planets have turned retrograde, and the degree
+        rising on the eastern horizon. Calculated live from a real astronomical ephemeris — no
+        horoscope feed, no lag.
+      </p>
+      <div class="hero-chips">
+        <span class="chip chip--gold">Geocentric</span>
+        <span class="chip">Tropical zodiac</span>
+        <span class="chip">Updated every 30s</span>
+        <span class="chip">Private by default</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container">
+      <SkyApp client:load />
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container read-grid">
+      <div>
+        <p class="kicker">How to read this page</p>
+        <h2 class="display h2">Weather,<br /><em class="gold">not fate.</em></h2>
+      </div>
+      <div class="read-copy">
+        <p>
+          Transits describe the symbolic weather of a moment. A Full Moon does not cause an argument;
+          it is a useful mirror for what is already ripe. Mercury retrograde does not break your
+          laptop; it is an invitation to review, back up, and slow the confident email.
+        </p>
+        <p>
+          The planetary positions here are geocentric and tropical — the same conventions used in
+          your birth chart. The Moon phase is the actual angle between the Moon and Sun as seen from
+          Earth. The rising sign needs a location because the horizon is local.
+        </p>
+        <div class="read-actions">
+          <a class="btn btn-ghost btn-sm" href={href('/learn/#moon-phases')}>Moon phases explained</a>
+          <a class="btn btn-ghost btn-sm" href={href('/learn/#method')}>Our method</a>
+          <a class="btn btn-primary btn-sm" href={href('/chart/')}>Cast your chart <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sky-hero {
+    position: relative;
+    padding: 9rem 0 1.5rem;
+    overflow: hidden;
+  }
+
+  .hero-orbit {
+    position: absolute;
+    top: 40%;
+    right: 5%;
+    width: 520px;
+    height: 520px;
+    border: 1px solid rgba(232, 196, 124, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .hero-orbit::before,
+  .hero-orbit::after {
+    content: '';
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+  }
+
+  .hero-orbit::before {
+    inset: 16%;
+  }
+
+  .hero-orbit::after {
+    inset: 34%;
+    border-color: rgba(201, 184, 255, 0.08);
+  }
+
+  .orbit-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 20px 2px rgba(232, 196, 124, 0.5);
+  }
+
+  .d1 {
+    top: 8%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+  }
+
+  .d2 {
+    top: 48%;
+    right: -2px;
+    width: 3px;
+    height: 3px;
+    background: var(--violet-soft);
+    box-shadow: 0 0 20px 2px rgba(201, 184, 255, 0.5);
+  }
+
+  .d3 {
+    bottom: 10%;
+    left: 30%;
+    width: 4px;
+    height: 4px;
+  }
+
+  .d4 {
+    top: 30%;
+    left: 10%;
+    width: 3px;
+    height: 3px;
+    background: var(--cyan);
+    box-shadow: 0 0 20px 2px rgba(125, 211, 252, 0.5);
+  }
+
+  .hero-copy {
+    position: relative;
+  }
+
+  .eyebrow.live {
+    color: var(--gold);
+  }
+
+  .eyebrow.live::before {
+    display: none;
+  }
+
+  .live-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px 2px rgba(232, 196, 124, 0.7);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  .h1 {
+    margin-top: 1rem;
+    font-size: clamp(3.6rem, 8vw, 6.8rem);
+  }
+
+  .lede {
+    margin-top: 1.3rem;
+    max-width: 58ch;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.4rem;
+  }
+
+  .section--tight {
+    padding: clamp(2rem, 4vw, 3rem) 0;
+  }
+
+  .read-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .read-grid .h2 {
+    margin-top: 0.6rem;
+  }
+
+  .read-copy p {
+    max-width: 64ch;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .read-copy p + p {
+    margin-top: 0.8rem;
+  }
+
+  .read-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.4;
+      transform: scale(0.8);
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .hero-orbit {
+      right: -30%;
+      opacity: 0.5;
+    }
+    .read-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .sky-hero {
+      padding-top: 7.4rem;
+    }
+    .hero-orbit {
+      display: none;
+    }
+  }
+</style>

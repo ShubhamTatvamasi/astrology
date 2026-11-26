@@ -1,0 +1,136 @@
+# Astra — astrology, decoded
+
+A static astrology web app built with **Astro + Svelte**. It calculates real birth charts from an astronomical ephemeris, explains the zodiac and the language of astrology, and shows the live sky — privately, in the browser.
+
+**Live:** https://shubhamtatvamasi.com/astrology/
+
+---
+
+## What it does
+
+- **Birth chart calculator** — Sun, Moon, rising sign, ten planets, the mean North Node, twelve houses, major aspects, element/modality balance, and a shareable chart URL.
+- **Big three finder** — a fast birth-data form that returns Sun, Moon and rising, with a link into the full chart.
+- **Zodiac encyclopedia** — all twelve signs with dates, elements, modalities, rulers, strengths, shadow, love, career, friendship, compatibility, and traditional correspondences.
+- **Learn astrology** — planets, signs, houses, aspects, moon phases, methodology, and FAQ.
+- **Sky now** — live moon phase and illumination, current planetary positions, retrogrades, and the degree rising at your location.
+- **Animations** — a drifting starfield with pointer parallax, shooting stars, a rotating cosmic wheel, on-scroll reveals, animated chart wheels and aspect lines, and reduced-motion support.
+- **No account, no database** — chart calculations happen in the browser. Share links encode the birth data in the URL.
+
+Routes (all static):
+
+| Route | Purpose |
+| --- | --- |
+| `/astrology/` | Home, big-three calculator, zodiac grid, guide |
+| `/astrology/chart/` | Full natal chart calculator |
+| `/astrology/zodiac/` | Filterable zodiac index |
+| `/astrology/zodiac/[sign]/` | Twelve sign profiles |
+| `/astrology/sky/` | Live sky and transits |
+| `/astrology/learn/` | The grammar of astrology |
+| `/astrology/404.html` | Not-found page |
+
+---
+
+## Stack
+
+- [Astro 7](https://astro.build) — static site, file-based routing, view transitions
+- [Svelte 5](https://svelte.dev) — interactive islands (forms, charts, filters, live sky)
+- [Astronomy Engine](https://github.com/cosinekitty/astronomy) — VSOP87-based ephemeris, ~1 arcminute accuracy
+- Self-hosted fonts via Fontsource: Space Grotesk + Instrument Serif
+- No CSS framework; custom design tokens and animations
+- GitHub Actions → GitHub Pages
+
+---
+
+## Local development
+
+Requires Node **22.23.4+** (see `.nvmrc`).
+
+```bash
+npm install
+npm run dev
+```
+
+The site is served at **http://localhost:4321/astrology/** because `base` is `/astrology`.
+
+Useful scripts:
+
+```bash
+npm run dev      # start the dev server
+npm run build    # production build to dist/
+npm run preview  # preview the production build
+npm run check    # Astro + TypeScript + Svelte diagnostics
+```
+
+---
+
+## Deployment
+
+Deployment source is **GitHub Actions**. The workflow at `.github/workflows/deploy.yml`:
+
+1. installs dependencies with `npm ci`
+2. runs `npm run check`
+3. builds the static site
+4. uploads `dist/` as a Pages artifact
+5. deploys it with `actions/deploy-pages`
+
+In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions**.
+
+The site is configured in `astro.config.mjs`:
+
+```js
+site: 'https://shubhamtatvamasi.com',
+base: '/astrology',
+```
+
+If the repository is renamed or moved, update `base` and the sitemap/robots URLs in `public/robots.txt` and `public/site.webmanifest`.
+
+---
+
+## How the chart is calculated
+
+- **Tropical zodiac**, measured from the vernal equinox (not sidereal).
+- **Apparent geocentric ecliptic longitude of date** for the Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, and Pluto, using Astronomy Engine and the `EQJ → ECT` rotation.
+- **Ascendant and Midheaven** from Greenwich apparent sidereal time, geographic longitude/latitude, and the mean obliquity of the ecliptic.
+- **Whole sign houses** by default; an equal-house switch measures 30° segments from the exact Ascendant.
+- **Mean North Node** from the standard lunar-node polynomial.
+- **Major aspects** with orbs: conjunction 8°, sextile 5°, square 7°, trine 7°, opposition 8°.
+- **Time zones** resolved with the browser's IANA database, including historical daylight saving. Manual coordinates use a UTC offset.
+- **Unknown birth time** uses 12:00 noon local time and clearly marks the rising sign and houses as approximate.
+
+Validation: for 6 July 1946, 07:26, New Haven, CT, the engine returns Sun 13°46′ Cancer, Moon 16°42′ Libra, Ascendant 7°06′ Leo, and MC 24°12′ Aries — matching published charts for that birth record to the arcminute.
+
+See [`RESEARCH.md`](./RESEARCH.md) for sources and design decisions.
+
+---
+
+## Project structure
+
+```
+src/
+  components/        # Astro + Svelte UI, chart wheel, starfield, forms
+  data/              # signs, planets, houses, aspects, moon phases
+  layouts/           # BaseLayout with SEO, nav, footer, starfield
+  lib/               # astronomy, time zones, geocoding, URL helpers
+  pages/             # routes (index, chart, zodiac, sky, learn, 404)
+  styles/            # global design tokens and utilities
+public/              # favicon, OG image, manifest, robots
+.github/workflows/   # GitHub Pages deployment
+```
+
+---
+
+## Privacy
+
+Birth data is processed entirely in the browser. The only network request is the optional city search, which sends the typed place name to the [Open-Meteo geocoding API](https://open-meteo.com/). Nothing is stored on a server. A share link contains the birth data in its query string, so treat shared links accordingly.
+
+---
+
+## A note on astrology
+
+Astrology is a symbolic and reflective tradition, not a science, and this app is not medical, financial, legal, or psychological advice. The astronomy is real and precise; the meanings assigned to the positions are interpretive. Use it to ask better questions.
+
+---
+
+## License
+
+MIT © 2026 Shubham Tatvamasi

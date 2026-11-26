@@ -1,0 +1,1368 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AspectWheel from '../components/AspectWheel.astro';
+import MoonPhase from '../components/MoonPhase.svelte';
+import { ASPECTS } from '../data/aspects';
+import { HOUSES } from '../data/houses';
+import { MOON_PHASES } from '../data/moons';
+import { PLANETS } from '../data/planets';
+import { SIGNS } from '../data/signs';
+import { href } from '../lib/url';
+
+const elementColor: Record<string, string> = {
+  Fire: '#ff8a5c',
+  Earth: '#7fcf9d',
+  Air: '#8fb8ff',
+  Water: '#b79dff',
+};
+
+const matrix = (['Fire', 'Earth', 'Air', 'Water'] as const).map((element) => ({
+  element,
+  color: elementColor[element],
+  cells: (['Cardinal', 'Fixed', 'Mutable'] as const).map((modality) => ({
+    modality,
+    sign: SIGNS.find((s) => s.element === element && s.modality === modality)!,
+  })),
+}));
+
+const phases = MOON_PHASES.map((phase) => {
+  const [start, end] = phase.range;
+  const mid = start > end ? 0 : (start + end) / 2;
+  return { ...phase, mid };
+});
+
+const bigThree = [
+  {
+    glyph: '☉',
+    label: 'Sun',
+    title: 'The headline',
+    copy: 'Your Sun sign is the core identity: what you are here to express, and the style of your vitality. It is the “I am” of the chart — necessary, but nowhere near the whole story.',
+    color: '#f2c56b',
+  },
+  {
+    glyph: '☽',
+    label: 'Moon',
+    title: 'The private life',
+    copy: 'The Moon is your emotional operating system: what you need to feel safe, how you self-soothe, and the weather underneath the personality. It is often more intimate than the Sun.',
+    color: '#d8d6ef',
+  },
+  {
+    glyph: '♈',
+    label: 'Rising',
+    title: 'The front door',
+    copy: 'The Ascendant is the zodiac degree rising on the eastern horizon at your birth. It shapes first impressions, your instinctive approach, and the way people meet you before they know you.',
+    color: '#e8c47c',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Is astrology a science?',
+    a: 'No. Astrology is a symbolic language and a reflective practice, not a predictive science. The astronomy in Astra is real and precise; the meanings assigned to the positions are cultural and interpretive. Use them to ask better questions, not to make medical, financial, or legal decisions.',
+  },
+  {
+    q: 'Why is my sun sign different from the newspaper?',
+    a: 'Newspaper horoscopes use calendar date ranges. A real chart uses the exact degree of the Sun at your birth moment. If you were born on a cusp — within a day of a sign change — the exact time and year decide which side you land on.',
+  },
+  {
+    q: 'What happens if I do not know my birth time?',
+    a: 'You can still calculate your Sun and most planets accurately. The Moon moves about 13° per day, so it may shift signs within your birth date. The rising sign changes roughly every two hours, and house placements depend on it — Astra marks those as approximate when you select “time unknown.”',
+  },
+  {
+    q: 'Which house system does Astra use?',
+    a: 'The default is whole sign houses: each house is one whole zodiac sign, beginning with the rising sign. You can switch to equal houses, which measure 30° segments from the exact Ascendant. Different systems are different lenses; none is the one true grid.',
+  },
+  {
+    q: 'Why do you include Pluto and the North Node?',
+    a: 'Pluto is included by most modern astrologers as a generational and transformative point. The North Node is not a planet but the point where the Moon’s orbit crosses the ecliptic; it is used as a direction of growth. Astra uses the mean node, which is a smooth average of the true node.',
+  },
+  {
+    q: 'Is my birth data stored?',
+    a: 'No. The chart is calculated entirely in your browser. The only network request is the optional city search, which sends your typed city name to the Open-Meteo geocoding service. Nothing is saved on a server. Share links encode the birth data in the URL itself.',
+  },
+  {
+    q: 'What about sidereal or Vedic astrology?',
+    a: 'Astra uses the tropical zodiac, the system most common in Western astrology, measured from the vernal equinox. Sidereal systems measure against the fixed stars and currently differ by roughly 24°, so a planet can sit in a different sign. Both are internally coherent traditions; they are not interchangeable.',
+  },
+];
+---
+
+<BaseLayout
+  title="Learn astrology — planets, houses, aspects & moon phases"
+  description="A clear, modern guide to the building blocks of astrology: the big three, the ten planets, the twelve houses, major aspects, moon phases, and how a real birth chart is calculated."
+>
+  <section class="learn-hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">The grammar of the sky</p>
+        <h1 class="display h1">
+          Astrology is<br />
+          a <em class="gold">language.</em>
+        </h1>
+        <p class="lede">
+          Planets are the verbs. Signs are the adverbs. Houses are the setting. Aspects are the plot.
+          Learn these four pieces and you can read any chart — including your own — without
+          pretending it is a fortune cookie.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={href('/chart/')}>Cast your chart <span class="arrow">→</span></a>
+          <a class="btn btn-ghost" href="#planets">Start with the planets</a>
+        </div>
+      </div>
+
+      <div class="hero-orbit" aria-hidden="true">
+        <div class="orbit-ring ring-one"></div>
+        <div class="orbit-ring ring-two"></div>
+        <div class="orbit-core">
+          <span class="core-glyph glyph">☉</span>
+          <span class="core-label">the language</span>
+        </div>
+        <span class="orbit-chip chip-one">Planets <span class="glyph">☿</span></span>
+        <span class="orbit-chip chip-two">Signs <span class="glyph">♈</span></span>
+        <span class="orbit-chip chip-three">Houses <span class="glyph">⌂</span></span>
+        <span class="orbit-chip chip-four">Aspects <span class="glyph">△</span></span>
+        <span class="orbit-star s1">✦</span>
+        <span class="orbit-star s2">✦</span>
+        <span class="orbit-star s3">✦</span>
+      </div>
+    </div>
+  </section>
+
+  <nav class="container learn-nav" aria-label="Guide sections">
+    <a href="#big-three">Big three</a>
+    <a href="#planets">Planets</a>
+    <a href="#signs">Signs</a>
+    <a href="#houses">Houses</a>
+    <a href="#aspects">Aspects</a>
+    <a href="#moon-phases">Moon phases</a>
+    <a href="#method">Method</a>
+  </nav>
+
+  <section class="section--tight" id="big-three">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">01 · The big three</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">Sun. Moon.<br /><em class="gold">Rising.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          If someone asks for “your sign,” they usually mean your Sun. But the chart has three
+          headline placements, and they do different jobs. Together they are the fastest way to
+          recognize yourself in the wheel.
+        </p>
+      </div>
+
+      <div class="three-grid">
+        {bigThree.map((item, i) => (
+          <article class="big-card card reveal" style={`--delay:${i * 70}ms; --c:${item.color}`}>
+            <div class="big-head">
+              <span class="big-glyph glyph">{item.glyph}</span>
+              <div>
+                <p class="big-label">{item.label}</p>
+                <h3 class="serif">{item.title}</h3>
+              </div>
+            </div>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+      <p class="section-note">
+        <span aria-hidden="true">✦</span> Your Sun is what you are becoming. Your Moon is what you need.
+        Your rising sign is how you arrive.
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight" id="planets">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">02 · The planets</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">Ten bodies.<br /><em class="gold">Ten appetites.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          In astrology, “planet” includes the Sun and Moon. Each body represents a function of the
+          psyche — a kind of wanting, thinking, or acting. The sign it occupies describes the style;
+          the house describes the arena.
+        </p>
+      </div>
+
+      <div class="planet-grid">
+        {PLANETS.map((planet, i) => (
+          <article class="planet-card card reveal" style={`--delay:${(i % 2) * 60}ms`}>
+            <div class="planet-head">
+              <span class="planet-glyph glyph" style={`color:${planet.color}`}>{planet.glyph}</span>
+              <div class="planet-id">
+                <h3 class="serif">{planet.name}</h3>
+                <p>{planet.keyword}{planet.rules !== '—' ? ` · rules ${planet.rules}` : ''}</p>
+              </div>
+              <span class="planet-cycle">{planet.cycle}</span>
+            </div>
+            <p class="planet-desc">{planet.description}</p>
+            <p class="planet-retro"><span aria-hidden="true">℞</span>{planet.retrograde}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" id="signs">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">03 · The signs</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">Four elements,<br /><em class="gold">three rhythms.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          Every sign combines one element (what it is made of) with one modality (how it moves).
+          Fire is spirit, Earth is matter, Air is mind, Water is feeling. Cardinal starts, Fixed
+          sustains, Mutable adapts.
+        </p>
+      </div>
+
+      <div class="matrix-wrap reveal">
+        <div class="matrix">
+          <div class="matrix-corner"></div>
+          {['Cardinal', 'Fixed', 'Mutable'].map((modality) => (
+            <div class="matrix-column">{modality}</div>
+          ))}
+          {matrix.map((row) => (
+            <div class="matrix-row">
+              <div class="matrix-row-label" style={`--c:${row.color}`}>
+                <span class="element-dot" style={`color:${row.color}`}></span>
+                <span>{row.element}</span>
+              </div>
+              {row.cells.map((cell) => (
+                <a class="matrix-cell" href={href(`/zodiac/${cell.sign.slug}/`)} style={`--c:${row.color}`}>
+                  <span class="matrix-glyph glyph">{cell.sign.glyph}</span>
+                  <span class="matrix-name">{cell.sign.name}</span>
+                  <span class="matrix-keyword">{cell.sign.keyword}</span>
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="signs-foot">
+        <p>
+          The matrix is not a personality grid. It is a set of symbolic positions. Read the full
+          profile for any sign to see how its light and shadow actually behave.
+        </p>
+        <a class="btn btn-ghost btn-sm" href={href('/zodiac/')}>Explore all twelve <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" id="houses">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">04 · The houses</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">Twelve rooms.<br /><em class="gold">One life.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          Houses divide the chart into areas of life. If a planet is the actor and the sign is the
+          costume, the house is the stage. The first house begins at your rising sign.
+        </p>
+      </div>
+
+      <div class="house-grid">
+        {HOUSES.map((house, i) => (
+          <details class="house-card card reveal" style={`--delay:${(i % 2) * 50}ms`}>
+            <summary>
+              <span class="house-num">{String(house.number).padStart(2, '0')}</span>
+              <span class="house-copy">
+                <span class="house-title">{house.title}</span>
+                <span class="house-domain">{house.domain}</span>
+              </span>
+              <span class="house-sign glyph" title={`Natural sign: ${house.sign}`}>{house.signGlyph}</span>
+              <span class="house-plus" aria-hidden="true"></span>
+            </summary>
+            <div class="house-body">
+              <p class="house-question">“{house.question}”</p>
+              <p>{house.description}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" id="aspects">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">05 · The aspects</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">How the parts<br /><em class="gold">talk to each other.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          Aspects are angles between planets. They describe cooperation, friction, and the
+          conversations that make a chart feel like a personality instead of a list. An “orb” is how
+          close the angle is to exact; tighter orbs are stronger.
+        </p>
+      </div>
+
+      <div class="aspect-layout">
+        <div class="aspect-visual reveal">
+          <AspectWheel />
+          <p class="visual-caption">
+            All five aspects, measured from the same starting point. The line length is the angle.
+          </p>
+        </div>
+
+        <div class="aspect-list">
+          {ASPECTS.map((aspect, i) => (
+            <article class="aspect-card card reveal" style={`--delay:${i * 50}ms; --c:${aspect.color}`}>
+              <div class="aspect-head">
+                <span class="aspect-glyph glyph">{aspect.glyph}</span>
+                <div>
+                  <h3>{aspect.name}</h3>
+                  <p class="aspect-angle">{aspect.angle}° · orb {aspect.orb}° · {aspect.tone}</p>
+                </div>
+              </div>
+              <p class="aspect-desc">{aspect.description}</p>
+              <p class="aspect-invite"><span aria-hidden="true">✦</span> {aspect.invitation}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" id="moon-phases">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">06 · The lunar cycle</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">Eight phases.<br /><em class="gold">One rhythm.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          The Moon completes a cycle every 29.5 days. The phases are defined by the angle between the
+          Moon and Sun as seen from Earth. Each phase has a different quality of light — and a
+          different invitation.
+        </p>
+      </div>
+
+      <div class="moon-grid">
+        {phases.map((phase, i) => (
+          <article class="moon-card card reveal" style={`--delay:${(i % 4) * 50}ms`}>
+            <div class="moon-visual">
+              <MoonPhase elongation={phase.mid} size={72} glow={false} />
+            </div>
+            <h3 class="serif">{phase.name}</h3>
+            <p class="moon-meaning">{phase.meaning}</p>
+            <p class="moon-invite"><span aria-hidden="true">✦</span> {phase.invitation}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="moon-foot">
+        <p>
+          Today’s exact phase, illumination, and the next new and full moons are calculated live on
+          the <a href={href('/sky/')}>sky now</a> page.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" id="method">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">07 · Under the hood</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">How Astra<br /><em class="gold">calculates.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          The astronomy is precise. The interpretation is symbolic. Keeping those two claims separate
+          is the difference between a useful tool and a horoscope machine.
+        </p>
+      </div>
+
+      <div class="method-layout">
+        <div class="method-list reveal">
+          <div class="method-item">
+            <span class="method-num">01</span>
+            <div>
+              <h3>Apparent geocentric positions</h3>
+              <p>
+                Planet and Moon longitudes come from <a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine</a>,
+                an open-source VSOP87-based ephemeris accurate to about one arcminute. Positions are
+                geocentric and referred to the true ecliptic of date.
+              </p>
+            </div>
+          </div>
+          <div class="method-item">
+            <span class="method-num">02</span>
+            <div>
+              <h3>Tropical zodiac</h3>
+              <p>
+                Longitude 0° is the vernal equinox, not a fixed star. This is the tropical system used
+                in most Western astrology. Sidereal systems differ by roughly 24° today.
+              </p>
+            </div>
+          </div>
+          <div class="method-item">
+            <span class="method-num">03</span>
+            <div>
+              <h3>Ascendant & houses</h3>
+              <p>
+                The Ascendant is calculated from local apparent sidereal time, geographic latitude,
+                and the obliquity of the ecliptic. The Midheaven is derived from the same geometry.
+                Houses default to whole sign, with an equal-house option in the chart view.
+              </p>
+            </div>
+          </div>
+          <div class="method-item">
+            <span class="method-num">04</span>
+            <div>
+              <h3>Time zones & unknowns</h3>
+              <p>
+                City birth times are converted to UTC using the browser’s IANA time-zone database,
+                including historical daylight saving rules. Unknown birth times use 12:00 noon local
+                time, with the rising sign and houses marked approximate.
+              </p>
+            </div>
+          </div>
+          <div class="method-item">
+            <span class="method-num">05</span>
+            <div>
+              <h3>Orbs & the mean node</h3>
+              <p>
+                Major aspects use generous but traditional orbs: conjunction 8°, sextile 5°, square
+                7°, trine 7°, opposition 8°. The North Node is the mean lunar node. No minor aspects
+                are drawn, to keep the wheel readable.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq reveal" style="--delay:80ms">
+          <p class="faq-title">Questions people actually ask</p>
+          {faqs.map((faq) => (
+            <details class="faq-item">
+              <summary>{faq.q}<span aria-hidden="true">+</span></summary>
+              <p>{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <div class="sources reveal">
+        <p class="sources-title">Sources & further reading</p>
+        <div class="source-links">
+          <a href="https://spaceplace.nasa.gov/moon-phases" target="_blank" rel="noopener noreferrer">NASA — Moon phases ↗</a>
+          <a href="https://en.wikipedia.org/wiki/Astrological_aspect" target="_blank" rel="noopener noreferrer">Ptolemaic aspects ↗</a>
+          <a href="https://www.almanac.com/12-astrology-zodiac-signs" target="_blank" rel="noopener noreferrer">The Old Farmer’s Almanac — zodiac signs ↗</a>
+          <a href="https://www.chani.com/blogs/astrological-key-terms" target="_blank" rel="noopener noreferrer">CHANI — key terms ↗</a>
+          <a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="container cta-inner">
+      <div>
+        <p class="kicker">Now put it together</p>
+        <h2 class="display h2">You know the grammar.<br /><em class="gold">Read your chart.</em></h2>
+      </div>
+      <a class="btn btn-primary" href={href('/chart/')}>Cast your free chart <span class="arrow">→</span></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .learn-hero {
+    padding: 9rem 0 2rem;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+  }
+
+  .hero-copy .h1 {
+    margin-top: 1rem;
+    font-size: clamp(3.4rem, 7.5vw, 6.4rem);
+  }
+
+  .hero-copy .lede {
+    margin-top: 1.3rem;
+    max-width: 55ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.7rem;
+  }
+
+  .hero-orbit {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 1;
+    justify-self: end;
+    isolation: isolate;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .ring-one {
+    inset: 6%;
+    border-style: dashed;
+    border-color: rgba(232, 196, 124, 0.22);
+    animation: spin-slow 80s linear infinite;
+  }
+
+  .ring-two {
+    inset: 22%;
+    border-color: rgba(201, 184, 255, 0.15);
+    animation: spin-slow 50s linear infinite reverse;
+  }
+
+  .orbit-core {
+    position: absolute;
+    inset: 33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, rgba(232, 196, 124, 0.16), rgba(10, 11, 22, 0.9) 65%);
+    border: 1px solid rgba(232, 196, 124, 0.28);
+    box-shadow: 0 0 70px -16px rgba(232, 196, 124, 0.4);
+    animation: breathe 7s ease-in-out infinite;
+  }
+
+  .core-glyph {
+    font-size: clamp(2.5rem, 5vw, 3.6rem);
+    color: var(--gold-bright);
+  }
+
+  .core-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .orbit-chip {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(9, 10, 20, 0.82);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    backdrop-filter: blur(8px);
+    animation: float-y 6s ease-in-out infinite;
+  }
+
+  .orbit-chip .glyph {
+    color: var(--gold);
+    font-size: 0.8rem;
+  }
+
+  .chip-one {
+    top: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: 0.2s;
+  }
+
+  .chip-two {
+    top: 44%;
+    right: -2%;
+    animation-delay: 1.2s;
+  }
+
+  .chip-three {
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: 2s;
+  }
+
+  .chip-four {
+    top: 44%;
+    left: -2%;
+    animation-delay: 0.7s;
+  }
+
+  .orbit-star {
+    position: absolute;
+    color: var(--gold);
+    font-size: 0.6rem;
+    opacity: 0.5;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+
+  .s1 {
+    top: 18%;
+    left: 20%;
+  }
+
+  .s2 {
+    bottom: 22%;
+    right: 24%;
+    animation-delay: 1.4s;
+  }
+
+  .s3 {
+    top: 30%;
+    right: 14%;
+    animation-delay: 2.2s;
+  }
+
+  .learn-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    padding: 0.4rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.02);
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 1rem;
+  }
+
+  .learn-nav a {
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .learn-nav a:hover {
+    background: rgba(232, 196, 124, 0.09);
+    color: var(--gold-bright);
+  }
+
+  .section--tight {
+    padding: clamp(3.5rem, 7vw, 6rem) 0;
+    scroll-margin-top: 100px;
+  }
+
+  .three-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .big-card {
+    padding: 1.4rem;
+    border-top: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
+  }
+
+  .big-head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .big-glyph {
+    font-size: 1.9rem;
+    color: var(--c);
+  }
+
+  .big-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .big-head h3 {
+    font-size: 1.3rem;
+    font-weight: 400;
+  }
+
+  .big-card > p {
+    font-size: 0.82rem;
+    line-height: 1.62;
+    color: var(--muted);
+  }
+
+  .section-note {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 1.4rem;
+    font-size: 0.76rem;
+    font-style: italic;
+    font-family: var(--font-serif);
+    color: var(--faint);
+  }
+
+  .section-note span {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .planet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+  }
+
+  .planet-card {
+    padding: 1.3rem;
+  }
+
+  .planet-head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .planet-glyph {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid var(--line);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .planet-id h3 {
+    font-size: 1.35rem;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .planet-id p {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .planet-cycle {
+    margin-left: auto;
+    padding: 0.22rem 0.55rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    font-size: 0.58rem;
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  .planet-desc {
+    margin-top: 0.8rem;
+    font-size: 0.79rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .planet-retro {
+    margin-top: 0.7rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--line-soft);
+    font-size: 0.7rem;
+    line-height: 1.55;
+    color: var(--faint);
+  }
+
+  .planet-retro span {
+    margin-right: 0.35rem;
+    color: var(--rose);
+  }
+
+  .matrix-wrap {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: 110px repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    min-width: 700px;
+  }
+
+  .matrix-column {
+    padding: 0.6rem;
+    text-align: center;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .matrix-row {
+    display: contents;
+  }
+
+  .matrix-row-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.8rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+
+  .matrix-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+    padding: 0.85rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.018);
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.3s var(--ease);
+  }
+
+  .matrix-cell:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--c) 40%, transparent);
+    background: color-mix(in srgb, var(--c) 6%, transparent);
+  }
+
+  .matrix-glyph {
+    font-size: 1.3rem;
+    color: var(--c);
+  }
+
+  .matrix-name {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.1;
+  }
+
+  .matrix-keyword {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .signs-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1.2rem;
+  }
+
+  .signs-foot p {
+    max-width: 62ch;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    color: var(--faint);
+  }
+
+  .house-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  .house-card {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .house-card summary {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) 1.5rem 1.2rem;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .house-card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .house-num {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--gold);
+  }
+
+  .house-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .house-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .house-domain {
+    font-size: 0.66rem;
+    color: var(--faint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .house-sign {
+    color: var(--gold);
+    opacity: 0.5;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .house-plus {
+    position: relative;
+    width: 12px;
+    height: 12px;
+  }
+
+  .house-plus::before,
+  .house-plus::after {
+    content: '';
+    position: absolute;
+    background: var(--faint);
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+
+  .house-plus::before {
+    left: 0;
+    top: 5.5px;
+    width: 12px;
+    height: 1px;
+  }
+
+  .house-plus::after {
+    left: 5.5px;
+    top: 0;
+    width: 1px;
+    height: 12px;
+  }
+
+  .house-card[open] .house-plus::after {
+    transform: rotate(90deg);
+  }
+
+  .house-card[open] .house-plus::before,
+  .house-card[open] .house-plus::after {
+    background: var(--gold);
+  }
+
+  .house-body {
+    padding: 0 1.1rem 1.1rem 3.8rem;
+    animation: detail-in 0.35s var(--ease);
+  }
+
+  .house-question {
+    margin-bottom: 0.4rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--gold);
+  }
+
+  .house-body p:last-child {
+    font-size: 0.76rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .aspect-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+
+  .aspect-visual {
+    position: sticky;
+    top: 110px;
+  }
+
+  .visual-caption {
+    margin-top: 0.6rem;
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--faint);
+  }
+
+  .aspect-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .aspect-card {
+    padding: 1.2rem;
+    border-left: 2px solid color-mix(in srgb, var(--c) 55%, transparent);
+  }
+
+  .aspect-head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .aspect-glyph {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  }
+
+  .aspect-head h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .aspect-angle {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .aspect-desc {
+    margin-top: 0.7rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .aspect-invite {
+    margin-top: 0.55rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--faint);
+  }
+
+  .aspect-invite span {
+    color: var(--gold);
+    font-style: normal;
+    font-size: 0.6rem;
+  }
+
+  .moon-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .moon-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.1rem;
+  }
+
+  .moon-visual {
+    margin-bottom: 0.7rem;
+  }
+
+  .moon-card h3 {
+    font-size: 1.15rem;
+    font-weight: 400;
+  }
+
+  .moon-meaning {
+    margin-top: 0.4rem;
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .moon-invite {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--line-soft);
+    font-size: 0.68rem;
+    line-height: 1.5;
+    color: var(--faint);
+  }
+
+  .moon-invite span {
+    color: var(--gold);
+  }
+
+  .moon-foot {
+    margin-top: 1.2rem;
+    font-size: 0.74rem;
+    color: var(--faint);
+  }
+
+  .moon-foot a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .method-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+
+  .method-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .method-item {
+    display: flex;
+    gap: 0.9rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .method-num {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .method-item h3 {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .method-item p {
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .method-item a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .faq {
+    padding: 1.3rem;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .faq-title {
+    margin-bottom: 0.7rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .faq-item:last-child {
+    border-bottom: 0;
+  }
+
+  .faq-item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.8rem;
+    color: var(--ink);
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary span {
+    color: var(--gold);
+    font-size: 1rem;
+    transition: transform 0.25s ease;
+  }
+
+  .faq-item[open] summary span {
+    transform: rotate(45deg);
+  }
+
+  .faq-item p {
+    padding-bottom: 0.8rem;
+    font-size: 0.74rem;
+    line-height: 1.65;
+    color: var(--muted);
+    animation: detail-in 0.3s ease;
+  }
+
+  .sources {
+    margin-top: 2.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .sources-title {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .source-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    margin-top: 0.7rem;
+  }
+
+  .source-links a {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.15);
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  .source-links a:hover {
+    color: var(--gold);
+  }
+
+  .cta-section {
+    padding-top: 3rem;
+  }
+
+  .cta-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: clamp(1.6rem, 4vw, 3rem);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    background:
+      radial-gradient(500px 220px at 20% 0%, rgba(232, 196, 124, 0.08), transparent 70%),
+      rgba(255, 255, 255, 0.02);
+  }
+
+  .cta-inner .h2 {
+    margin-top: 0.5rem;
+    font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  }
+
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.85;
+    }
+    50% {
+      transform: scale(1.04);
+      opacity: 1;
+    }
+  }
+
+  @keyframes detail-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-orbit {
+      justify-self: center;
+      max-width: 420px;
+    }
+    .hero-copy .h1 {
+      font-size: clamp(3.2rem, 10vw, 5rem);
+    }
+    .three-grid {
+      grid-template-columns: 1fr;
+    }
+    .planet-grid,
+    .aspect-layout,
+    .method-layout {
+      grid-template-columns: 1fr;
+    }
+    .aspect-visual {
+      position: static;
+      max-width: 420px;
+      margin-inline: auto;
+    }
+    .moon-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .house-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .learn-hero {
+      padding-top: 7.4rem;
+    }
+    .moon-grid {
+      grid-template-columns: 1fr;
+    }
+    .learn-nav {
+      border-radius: 18px;
+    }
+    .signs-foot,
+    .cta-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .house-body {
+      padding-left: 1.1rem;
+    }
+  }
+</style>

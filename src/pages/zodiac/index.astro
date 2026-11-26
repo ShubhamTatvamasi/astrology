@@ -1,0 +1,329 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CosmicWheel from '../../components/CosmicWheel.astro';
+import SignExplorer from '../../components/SignExplorer.svelte';
+import { ELEMENTS, MODALITIES, SIGNS } from '../../data/signs';
+import { href } from '../../lib/url';
+
+const elementColor: Record<string, string> = {
+  Fire: '#ff8a5c',
+  Earth: '#7fcf9d',
+  Air: '#8fb8ff',
+  Water: '#b79dff',
+};
+
+const activeSigns = (element: string) => SIGNS.filter((s) => s.element === element);
+---
+
+<BaseLayout
+  title="The zodiac — signs, dates, elements & meanings"
+  description="Explore all twelve zodiac signs: dates, elements, modalities, ruling planets, personality traits, love, career, and compatibility. A clear, modern guide from Astra."
+>
+  <section class="page-hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">The twelve</p>
+        <h1 class="display h1">
+          The zodiac,<br />
+          <em class="gold">without the noise.</em>
+        </h1>
+        <p class="lede">
+          Twelve signs, four elements, three rhythms. No “today you will meet a tall stranger” —
+          just the symbolic vocabulary that astrologers have used for centuries to talk about
+          personality, timing, and change.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={href('/chart/')}>Find your placements <span class="arrow">→</span></a>
+          <a class="btn btn-ghost" href={href('/learn/')}>How astrology works</a>
+        </div>
+        <div class="hero-stats">
+          <span><strong>12</strong> signs</span>
+          <span><strong>4</strong> elements</span>
+          <span><strong>3</strong> modalities</span>
+        </div>
+      </div>
+      <div class="hero-art">
+        <CosmicWheel />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">Browse the wheel</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">Pick a sign.<br /><em class="gold">Any sign.</em></h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          Each profile covers the sign’s style, its shadow, how it loves and works, and where it
+          finds chemistry with other signs. Filter by element or modality to see the pattern.
+        </p>
+      </div>
+      <SignExplorer client:load />
+    </div>
+  </section>
+
+  <section class="section elements-section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">The pattern underneath</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">
+            Four elements.<br />
+            <em class="gold">Three rhythms.</em>
+          </h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          Elements describe the substance of a sign; modalities describe how it moves. Every sign is
+          one of each — which is why no two fire signs feel the same.
+        </p>
+      </div>
+
+      <div class="elements-grid">
+        {Object.entries(ELEMENTS).map(([name, meta], i) => (
+          <article class="element-card card reveal" style={`--c:${elementColor[name]}; --delay:${i * 60}ms`}>
+            <div class="element-head">
+              <span class="element-symbol glyph" aria-hidden="true">{meta.glyph}</span>
+              <h3>{name}</h3>
+            </div>
+            <p class="element-copy">{meta.blurb}</p>
+            <div class="element-signs">
+              {activeSigns(name).map((sign) => (
+                <a href={href(`/zodiac/${sign.slug}/`)} class="mini-sign">
+                  <span class="glyph">{sign.glyph}</span> {sign.name}
+                </a>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="modalities-grid">
+        {Object.entries(MODALITIES).map(([name, meta], i) => (
+          <article class="modality-card reveal" style={`--delay:${i * 70}ms`}>
+            <span class="modality-index">0{i + 1}</span>
+            <h3 class="serif">{name}</h3>
+            <p>{meta.blurb}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-small">
+    <div class="container cta-inner">
+      <div>
+        <p class="kicker">Your sign is only the beginning</p>
+        <h2 class="display h2">The sun is one line.<br /><em class="gold">The chart is the book.</em></h2>
+      </div>
+      <a class="btn btn-primary" href={href('/chart/')}>Cast your birth chart <span class="arrow">→</span></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding: 9rem 0 2rem;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .hero-copy .h1 {
+    margin-top: 1rem;
+    font-size: clamp(3.2rem, 7vw, 6rem);
+  }
+
+  .hero-copy .lede {
+    margin-top: 1.3rem;
+    max-width: 52ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.7rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 1.6rem;
+    margin-top: 2rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line-soft);
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    color: var(--faint);
+  }
+
+  .hero-stats strong {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--gold);
+    margin-right: 0.25rem;
+  }
+
+  .hero-art {
+    max-width: 560px;
+    justify-self: end;
+    width: 100%;
+  }
+
+  .elements-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .element-card {
+    padding: 1.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
+  }
+
+  .element-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .element-symbol {
+    color: var(--c);
+    font-size: 1.1rem;
+  }
+
+  .element-head h3 {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 400;
+  }
+
+  .element-copy {
+    margin-top: 0.55rem;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .element-signs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .mini-sign {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: var(--faint);
+    transition: color 0.2s ease;
+  }
+
+  .mini-sign:hover {
+    color: var(--ink);
+  }
+
+  .mini-sign .glyph {
+    color: var(--c);
+    width: 1rem;
+  }
+
+  .modalities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+  }
+
+  .modality-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.3rem 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .modality-index {
+    font-family: var(--font-serif);
+    color: var(--gold);
+    font-size: 0.9rem;
+    grid-row: span 2;
+  }
+
+  .modality-card h3 {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .modality-card p {
+    font-size: 0.74rem;
+    line-height: 1.55;
+    color: var(--faint);
+  }
+
+  .cta-small {
+    padding-top: 2rem;
+  }
+
+  .cta-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: clamp(1.6rem, 4vw, 3rem);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    background:
+      radial-gradient(500px 200px at 15% 0%, rgba(232, 196, 124, 0.08), transparent 70%),
+      rgba(255, 255, 255, 0.02);
+  }
+
+  .cta-inner .h2 {
+    margin-top: 0.5rem;
+    font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  }
+
+  @media (max-width: 1000px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-art {
+      justify-self: center;
+      max-width: 500px;
+    }
+    .hero-copy .h1 {
+      font-size: clamp(3rem, 9vw, 5rem);
+    }
+    .elements-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .modalities-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .page-hero {
+      padding-top: 7.5rem;
+    }
+    .cta-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .elements-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

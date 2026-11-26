@@ -1,0 +1,135 @@
+---
+import { ASPECTS } from '../data/aspects';
+
+const CX = 210;
+const CY = 210;
+const R = 158;
+
+const point = (angle: number, radius: number) => {
+  const a = ((angle - 90) * Math.PI) / 180;
+  return {
+    x: (CX + Math.cos(a) * radius).toFixed(2),
+    y: (CY + Math.sin(a) * radius).toFixed(2),
+  };
+};
+
+const top = point(0, R);
+---
+
+<div class="aspect-wheel" aria-hidden="true">
+  <svg viewBox="0 0 420 420" fill="none">
+    <defs>
+      <radialGradient id="aspect-core" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(232,196,124,.2)" />
+        <stop offset="100%" stop-color="rgba(232,196,124,0)" />
+      </radialGradient>
+    </defs>
+
+    <circle cx={CX} cy={CY} r="198" fill="url(#aspect-core)" />
+    <circle cx={CX} cy={CY} r={R} stroke="rgba(255,255,255,.12)" />
+    <circle cx={CX} cy={CY} r="120" stroke="rgba(255,255,255,.06)" stroke-dasharray="2 6" />
+    <circle cx={CX} cy={CY} r="5" fill="var(--gold)" />
+
+    {ASPECTS.map((aspect, i) => {
+      const p = point(aspect.angle, R);
+      const label = point(aspect.angle, R + 22);
+      return (
+        <g class="aspect" style={`--c:${aspect.color}; --i:${i}`}>
+          <line
+            x1={top.x}
+            y1={top.y}
+            x2={p.x}
+            y2={p.y}
+            stroke={aspect.color}
+            stroke-opacity=".55"
+            stroke-width={aspect.key === 'conjunction' ? 0 : 1.1}
+            class="aspect-line"
+          />
+          <circle cx={p.x} cy={p.y} r="4" fill={aspect.color} />
+          <text
+            x={label.x}
+            y={label.y}
+            text-anchor="middle"
+            dominant-baseline="central"
+            fill={aspect.color}
+            class="aspect-label"
+          >
+            {aspect.angle}°
+          </text>
+          <text
+            x={label.x}
+            y={Number(label.y) + 13}
+            text-anchor="middle"
+            dominant-baseline="central"
+            fill="rgba(237,234,246,.45)"
+            class="aspect-name"
+          >
+            {aspect.name}
+          </text>
+        </g>
+      );
+    })}
+
+    <circle cx={top.x} cy={top.y} r="6" fill="var(--gold)" />
+    <text x={CX} y={CY - 14} text-anchor="middle" fill="rgba(237,234,246,.5)" class="center-label">
+      THE FIVE
+    </text>
+    <text x={CX} y={CY + 6} text-anchor="middle" fill="var(--gold-bright)" class="center-title">
+      MAJOR ASPECTS
+    </text>
+  </svg>
+</div>
+
+<style>
+  .aspect-wheel {
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+    animation: float-y 9s ease-in-out infinite;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .aspect-line {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: draw 1.4s var(--ease) forwards;
+    animation-delay: calc(var(--i) * 120ms + 300ms);
+  }
+
+  .aspect-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .aspect-name {
+    font-family: var(--font-sans);
+    font-size: 6.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .center-label {
+    font-family: var(--font-sans);
+    font-size: 7px;
+    letter-spacing: 0.24em;
+  }
+
+  .center-title {
+    font-family: var(--font-serif);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

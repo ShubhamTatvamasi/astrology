@@ -1,0 +1,42 @@
+{
+  "name": "astrology",
+  "version": "1.0.0",
+  "description": "Astra \u2014 a modern astrology web app with real birth charts, zodiac guides, and the live sky. Built with Astro + Svelte.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "keywords": [
+    "astrology",
+    "birth-chart",
+    "zodiac",
+    "astro",
+    "svelte"
+  ],
+  "author": "Shubham Tatvamasi",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@astrojs/svelte": "^9.1.6",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "astro": "^7.4.13",
+    "astronomy-engine": "^2.1.19",
+    "svelte": "^5.59.2"
+  },
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^6.0.3"
+  },
+  "homepage": "https://shubhamtatvamasi.com/astrology/",
+  "repository": "github:shubhamtatvamasi/astrology"
+}

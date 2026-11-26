@@ -1,0 +1,855 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CosmicWheel from '../components/CosmicWheel.astro';
+import SkyStrip from '../components/SkyStrip.svelte';
+import BigThree from '../components/BigThree.svelte';
+import { SIGNS, ELEMENTS } from '../data/signs';
+import { href } from '../lib/url';
+
+const elementColor: Record<string, string> = {
+  Fire: '#ff8a5c',
+  Earth: '#7fcf9d',
+  Air: '#8fb8ff',
+  Water: '#b79dff',
+};
+
+const pillars = [
+  {
+    glyph: '☉',
+    label: 'Planets',
+    title: 'The verbs',
+    copy: 'What is acting: the Sun’s identity, the Moon’s needs, Mercury’s mind, Mars’s drive. Ten bodies, ten kinds of appetite.',
+  },
+  {
+    glyph: '♈',
+    label: 'Signs',
+    title: 'The adverbs',
+    copy: 'How it acts: boldly, patiently, curiously, deeply. Twelve styles of energy, each with an element and a rhythm.',
+  },
+  {
+    glyph: '⌂',
+    label: 'Houses',
+    title: 'The setting',
+    copy: 'Where it happens: work, home, partnership, the private room at midnight. The stage on which the planet performs.',
+  },
+  {
+    glyph: '△',
+    label: 'Aspects',
+    title: 'The plot',
+    copy: 'How the parts talk to each other: easy trines, productive friction, impossible-seeming oppositions that turn out to be a conversation.',
+  },
+];
+---
+
+<BaseLayout
+  title="Astra — Your sky, decoded"
+  description="A modern astrology companion. Calculate your real birth chart, meet your big three, and learn the language of the zodiac — free and in your browser."
+>
+  <section class="hero">
+    <div class="hero-halo" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">A symbolic map of you</p>
+          <h1 class="display h1 hero-title reveal" style="--delay:60ms">
+            Your sky,<br />
+            <span class="hero-em">decoded.</span>
+          </h1>
+          <p class="lede hero-lede reveal" style="--delay:130ms">
+            Not just your sun sign. Astra reads the whole sky at the moment you were born — the
+            planets, the signs, the houses, and the conversations between them — and turns it into
+            something you can actually use.
+          </p>
+          <div class="hero-actions reveal" style="--delay:200ms">
+            <a class="btn btn-primary" href="#big-three">
+              Find your big three
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="btn btn-ghost" href={href('/zodiac/')}>Explore the zodiac</a>
+          </div>
+          <ul class="hero-facts reveal" style="--delay:260ms">
+            <li><span aria-hidden="true">✦</span> Free, no account</li>
+            <li><span aria-hidden="true">✦</span> Real ephemeris</li>
+            <li><span aria-hidden="true">✦</span> Private by default</li>
+          </ul>
+        </div>
+
+        <div class="hero-art reveal-scale" style="--delay:160ms">
+          <CosmicWheel />
+          <p class="art-caption">A chart is a conversation, not a verdict.</p>
+        </div>
+      </div>
+
+      <div class="strip-wrap reveal" style="--delay:320ms">
+        <SkyStrip client:visible />
+      </div>
+
+      <a class="scroll-cue" href="#big-three" aria-label="Scroll to the birth chart form">
+        <span class="scroll-line" aria-hidden="true"></span>
+        Begin
+      </a>
+    </div>
+  </section>
+
+  <section class="section chart-section" id="big-three">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">Start here</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">
+            Three placements.<br />
+            <em class="gold">One you.</em>
+          </h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          Your Sun is the headline, your Moon is the private life, and your rising sign is the door
+          people walk through to meet you. Together they are the fastest way into a chart.
+        </p>
+      </div>
+
+      <div class="reveal" style="--delay:80ms">
+        <BigThree client:load />
+      </div>
+
+      <p class="form-footnote">
+        <span aria-hidden="true">☾</span>
+        Birth time unknown? You can still calculate your Sun and most planets. We will tell you what
+        becomes approximate.
+      </p>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      {[0, 1].map(() => (
+        <div class="marquee-group">
+          {SIGNS.map((sign) => (
+            <span class="marquee-item">
+              <span class="glyph">{sign.glyph}</span>
+              <span>{sign.name}</span>
+              <span class="marquee-star">✦</span>
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <section class="section zodiac-section" id="zodiac">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="kicker reveal">The wheel</p>
+          <h2 class="display h2 reveal" style="--delay:60ms">
+            Twelve ways<br />
+            to <em class="gold">be alive.</em>
+          </h2>
+        </div>
+        <p class="lede reveal" style="--delay:120ms">
+          The zodiac is not a personality quiz. It is a set of twelve symbolic styles — four
+          elements, three rhythms, and a whole lot of nuance. Start with the sign you cannot stop
+          reading about.
+        </p>
+      </div>
+
+      <div class="sign-grid">
+        {SIGNS.map((sign, i) => (
+          <a
+            class="sign-card card reveal"
+            href={href(`/zodiac/${sign.slug}/`)}
+            style={`--c:${elementColor[sign.element]}; --delay:${i * 35}ms`}
+          >
+            <span class="sign-ghost glyph" aria-hidden="true">{sign.glyph}</span>
+            <div class="sign-top">
+              <span class="sign-glyph glyph">{sign.glyph}</span>
+              <span class="sign-dates">{sign.dates}</span>
+            </div>
+            <h3 class="sign-name">{sign.name}</h3>
+            <p class="sign-copy">{sign.short}</p>
+            <div class="sign-foot">
+              <span class="sign-meta">
+                <span class="element-dot" style={`color:${elementColor[sign.element]}`}></span>
+                {sign.element} · {sign.modality}
+              </span>
+              <span class="sign-arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section anatomy-section">
+    <div class="container anatomy-grid">
+      <div class="anatomy-copy">
+        <p class="kicker reveal">The language</p>
+        <h2 class="display h2 reveal" style="--delay:60ms">
+          A chart is<br />
+          a <em class="gold">sentence.</em>
+        </h2>
+        <p class="lede reveal" style="--delay:120ms">
+          Planets are the verbs. Signs are the adverbs. Houses are the setting. Aspects are the plot.
+          Learn those four pieces and the whole wheel stops looking like decoration.
+        </p>
+        <div class="anatomy-actions reveal" style="--delay:180ms">
+          <a class="btn btn-ghost" href={href('/learn/')}>Learn the language <span class="arrow">→</span></a>
+        </div>
+        <div class="element-key reveal" style="--delay:220ms">
+          {Object.entries(ELEMENTS).map(([name]) => (
+            <span class="element-key-item">
+              <span class="element-dot" style={`color:${elementColor[name]}`}></span>
+              {name}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div class="pillar-grid">
+        {pillars.map((pillar, i) => (
+          <article class="pillar card reveal" style={`--delay:${i * 70}ms`}>
+            <span class="pillar-glyph glyph" aria-hidden="true">{pillar.glyph}</span>
+            <span class="pillar-label">{pillar.label}</span>
+            <h3 class="pillar-title serif">{pillar.title}</h3>
+            <p class="pillar-copy">{pillar.copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section why-section">
+    <div class="container">
+      <div class="why-head">
+        <p class="kicker reveal">Why Astra</p>
+        <h2 class="display h2 reveal" style="--delay:60ms">
+          A real map,<br />
+          not a <em class="gold">meme.</em>
+        </h2>
+      </div>
+      <div class="why-grid">
+        <article class="why-card card reveal" style="--delay:0ms">
+          <span class="why-num">01</span>
+          <h3>Actual sky positions</h3>
+          <p>
+            Your chart is calculated from an astronomical ephemeris accurate to about an arcminute,
+            with historical time zones and daylight saving resolved in your browser. No horoscope
+            database, no date-range guess.
+          </p>
+        </article>
+        <article class="why-card card reveal" style="--delay:70ms">
+          <span class="why-num">02</span>
+          <h3>The whole conversation</h3>
+          <p>
+            Sun signs are one sentence. Astra shows all ten planets, the North Node, twelve houses,
+            major aspects, and the element balance — then lets you click into any placement.
+          </p>
+        </article>
+        <article class="why-card card reveal" style="--delay:140ms">
+          <span class="why-num">03</span>
+          <h3>Reflection, not prediction</h3>
+          <p>
+            Astrology here is a symbolic language for self-reflection. We won’t tell you what will
+            happen on Tuesday. We will show you the pattern you were born into and let you decide
+            what it means.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-stars" aria-hidden="true"></div>
+        <p class="kicker">The chart is waiting</p>
+        <h2 class="display cta-title">
+          The sky wrote<br />
+          <em>something.</em> Read it.
+        </h2>
+        <p class="cta-copy">
+          Free, private, and yours. Find the placements you have been circling for years.
+        </p>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href={href('/chart/')}>
+            Cast your full chart
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn-ghost" href={href('/sky/')}>See the sky right now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: 8.5rem 0 3rem;
+    overflow: hidden;
+  }
+
+  .hero-halo {
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 70vw;
+    height: 70vw;
+    max-width: 900px;
+    max-height: 900px;
+    background: radial-gradient(circle, rgba(139, 108, 246, 0.14), transparent 62%);
+    filter: blur(40px);
+    pointer-events: none;
+    animation: aurora-drift 18s ease-in-out infinite;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title {
+    margin-top: 1.1rem;
+    font-size: clamp(3.8rem, 8.8vw, 7.6rem);
+  }
+
+  .hero-em {
+    font-style: italic;
+    background: linear-gradient(105deg, #fff6df 0%, var(--gold-bright) 38%, var(--gold) 70%, #c9a0ff 110%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-lede {
+    margin-top: 1.4rem;
+    max-width: 50ch;
+    font-size: clamp(1rem, 1.35vw, 1.12rem);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.8rem;
+  }
+
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
+    margin-top: 1.6rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+
+  .hero-facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .hero-facts span {
+    color: var(--gold);
+    font-size: 0.65rem;
+  }
+
+  .hero-art {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .art-caption {
+    margin-top: -0.4rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--faint);
+    letter-spacing: 0.01em;
+  }
+
+  .strip-wrap {
+    margin-top: 0.4rem;
+  }
+
+  .scroll-cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    align-self: flex-start;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--faint);
+    transition: color 0.25s ease;
+  }
+
+  .scroll-cue:hover {
+    color: var(--gold);
+  }
+
+  .scroll-line {
+    width: 32px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    position: relative;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: scroll-dot 2.4s ease-in-out infinite;
+  }
+
+  @keyframes scroll-dot {
+    0%,
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateX(6px);
+      opacity: 0.4;
+    }
+  }
+
+  .chart-section {
+    padding-top: clamp(4rem, 8vw, 7rem);
+    scroll-margin-top: 96px;
+  }
+
+  .form-footnote {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-top: 1.2rem;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: var(--faint);
+  }
+
+  .form-footnote span {
+    color: var(--gold);
+  }
+
+  .marquee {
+    overflow: hidden;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    background: rgba(255, 255, 255, 0.015);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 48s linear infinite;
+  }
+
+  .marquee-group {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0 1.4rem;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  .marquee-item .glyph {
+    font-size: 1rem;
+    color: var(--gold);
+  }
+
+  .marquee-star {
+    margin-left: 0.8rem;
+    color: rgba(232, 196, 124, 0.35);
+    font-size: 0.55rem;
+  }
+
+  .sign-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .sign-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 235px;
+    padding: 1.25rem;
+    overflow: hidden;
+    border-color: rgba(255, 255, 255, 0.08);
+    transition:
+      transform 0.45s var(--ease),
+      border-color 0.45s ease,
+      box-shadow 0.45s ease;
+  }
+
+  .sign-card:hover {
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--c) 40%, transparent);
+    box-shadow: 0 24px 50px -30px color-mix(in srgb, var(--c) 50%, transparent);
+  }
+
+  .sign-ghost {
+    position: absolute;
+    right: -0.5rem;
+    bottom: -1.8rem;
+    font-size: 8.5rem;
+    line-height: 1;
+    color: var(--c);
+    opacity: 0.05;
+    transition: opacity 0.4s ease, transform 0.6s var(--ease);
+    pointer-events: none;
+  }
+
+  .sign-card:hover .sign-ghost {
+    opacity: 0.1;
+    transform: rotate(-8deg) scale(1.05);
+  }
+
+  .sign-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .sign-glyph {
+    font-size: 1.7rem;
+    color: var(--c);
+    transition: transform 0.5s var(--ease);
+  }
+
+  .sign-card:hover .sign-glyph {
+    transform: rotate(12deg) scale(1.1);
+  }
+
+  .sign-dates {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: var(--faint);
+    text-align: right;
+    padding-top: 0.35rem;
+  }
+
+  .sign-name {
+    margin-top: 0.9rem;
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .sign-copy {
+    margin-top: 0.5rem;
+    font-size: 0.74rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .sign-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+  }
+
+  .sign-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .sign-arrow {
+    color: var(--c);
+    font-size: 0.85rem;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .sign-card:hover .sign-arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .anatomy-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .anatomy-copy {
+    position: sticky;
+    top: 120px;
+  }
+
+  .anatomy-copy .lede {
+    margin-top: 1.2rem;
+    max-width: 40ch;
+  }
+
+  .anatomy-actions {
+    margin-top: 1.5rem;
+  }
+
+  .element-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem;
+    margin-top: 1.8rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .element-key-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+  }
+
+  .pillar {
+    padding: 1.4rem;
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pillar-glyph {
+    font-size: 1.5rem;
+    color: var(--gold);
+  }
+
+  .pillar-label {
+    margin-top: 1.4rem;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .pillar-title {
+    margin-top: 0.15rem;
+    font-size: 1.9rem;
+    line-height: 1;
+  }
+
+  .pillar-copy {
+    margin-top: 0.55rem;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .why-head {
+    margin-bottom: 2.4rem;
+  }
+
+  .why-head .h2 {
+    margin-top: 0.7rem;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .why-card {
+    padding: 1.5rem;
+  }
+
+  .why-num {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  .why-card h3 {
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .why-card p {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .cta-section {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .cta-card {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(2.5rem, 6vw, 5rem);
+    border: 1px solid rgba(232, 196, 124, 0.18);
+    border-radius: 32px;
+    background:
+      radial-gradient(700px 300px at 20% 0%, rgba(232, 196, 124, 0.12), transparent 65%),
+      radial-gradient(700px 400px at 90% 100%, rgba(139, 108, 246, 0.16), transparent 65%),
+      rgba(10, 11, 22, 0.7);
+    text-align: center;
+    isolation: isolate;
+  }
+
+  .cta-stars {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.7), transparent),
+      radial-gradient(1px 1px at 82% 18%, rgba(255, 244, 216, 0.7), transparent),
+      radial-gradient(1.2px 1.2px at 28% 78%, rgba(201, 184, 255, 0.6), transparent),
+      radial-gradient(1px 1px at 68% 68%, rgba(255, 255, 255, 0.5), transparent),
+      radial-gradient(1px 1px at 92% 82%, rgba(232, 196, 124, 0.6), transparent),
+      radial-gradient(1px 1px at 45% 34%, rgba(255, 255, 255, 0.35), transparent);
+    animation: twinkle 6s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .cta-title {
+    margin-top: 1rem;
+    font-size: clamp(2.8rem, 6.5vw, 5.8rem);
+    line-height: 0.92;
+  }
+
+  .cta-title em {
+    font-style: italic;
+    color: var(--gold-bright);
+  }
+
+  .cta-copy {
+    margin: 1.1rem auto 0;
+    max-width: 46ch;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.8rem;
+  }
+
+  @media (max-width: 1050px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .hero-art {
+      max-width: 530px;
+      margin-inline: auto;
+    }
+    .hero-title {
+      font-size: clamp(3.6rem, 11vw, 6rem);
+    }
+    .hero {
+      padding-top: 7.5rem;
+    }
+    .sign-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .anatomy-grid {
+      grid-template-columns: 1fr;
+    }
+    .anatomy-copy {
+      position: static;
+    }
+    .why-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .sign-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pillar-grid {
+      grid-template-columns: 1fr;
+    }
+    .sign-card {
+      min-height: 210px;
+    }
+    .sign-copy {
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sign-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-actions .btn {
+      width: 100%;
+    }
+  }
+</style>

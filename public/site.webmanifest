@@ -1,0 +1,24 @@
+{
+  "name": "Astra — Astrology, decoded",
+  "short_name": "Astra",
+  "description": "A modern astrology companion: real birth charts, the zodiac, and the live sky.",
+  "start_url": "/astrology/",
+  "scope": "/astrology/",
+  "display": "standalone",
+  "background_color": "#05060d",
+  "theme_color": "#05060d",
+  "icons": [
+    {
+      "src": "/astrology/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/astrology/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ChartApp from '../components/ChartApp.svelte';
+import { href } from '../lib/url';
+---
+
+<BaseLayout
+  title="Birth chart calculator — your real natal chart"
+  description="Calculate your birth chart from the exact sky at your birth. Free big three, all ten planets, houses, aspects, element balance, and a shareable chart — calculated privately in your browser."
+>
+  <section class="chart-hero">
+    <div class="container">
+      <div class="hero-inner">
+        <p class="eyebrow">Natal chart</p>
+        <h1 class="display h1">
+          Your chart,<br />
+          <em class="gold">calculated for real.</em>
+        </h1>
+        <p class="lede">
+          Enter the date, time, and place you were born. Astra calculates the actual positions of the
+          Sun, Moon, and planets from an astronomical ephemeris, then maps them onto the zodiac,
+          houses, and aspects.
+        </p>
+        <div class="hero-chips">
+          <span class="chip chip--gold">10 planets + North Node</span>
+          <span class="chip">12 houses</span>
+          <span class="chip">Major aspects</span>
+          <span class="chip">Shareable link</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container">
+      <ChartApp client:load />
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container info-grid">
+      <article class="info-card card">
+        <span class="info-glyph glyph" aria-hidden="true">◎</span>
+        <h2>Accurate, not approximated</h2>
+        <p>
+          Positions come from Astronomy Engine, a VSOP87-based ephemeris accurate to about one
+          arcminute. Birth times are resolved through the browser’s historical time-zone database,
+          including daylight saving.
+        </p>
+      </article>
+      <article class="info-card card">
+        <span class="info-glyph glyph" aria-hidden="true">⌂</span>
+        <h2>Whole sign or equal houses</h2>
+        <p>
+          The default is the traditional whole sign system; switch to equal houses in one click. The
+          Ascendant and Midheaven are calculated from local sidereal time, latitude, and the
+          obliquity of the ecliptic.
+        </p>
+      </article>
+      <article class="info-card card">
+        <span class="info-glyph glyph" aria-hidden="true">◇</span>
+        <h2>Private by design</h2>
+        <p>
+          Your birth data never leaves your device. The chart is computed in the browser; the only
+          network request is the optional city search. Share links encode the data in the URL, not a
+          database.
+        </p>
+      </article>
+    </div>
+
+    <div class="container accuracy-note">
+      <p>
+        <span aria-hidden="true">☾</span>
+        Don’t know your birth time? Use the “time unknown” option. We will calculate for noon local
+        time, keep the Sun and slow planets accurate, and clearly mark the rising sign and houses as
+        approximate.
+      </p>
+      <a href={href('/learn/#method')}>Read the full methodology →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .chart-hero {
+    padding: 9rem 0 1rem;
+  }
+
+  .hero-inner {
+    max-width: 900px;
+  }
+
+  .h1 {
+    margin-top: 1rem;
+    font-size: clamp(3.4rem, 7.4vw, 6.2rem);
+  }
+
+  .lede {
+    margin-top: 1.3rem;
+    max-width: 62ch;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.4rem;
+  }
+
+  .section--tight {
+    padding: clamp(2rem, 4vw, 3rem) 0;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .info-card {
+    padding: 1.4rem;
+  }
+
+  .info-glyph {
+    font-size: 1.4rem;
+    color: var(--gold);
+  }
+
+  .info-card h2 {
+    margin-top: 1.2rem;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 400;
+    line-height: 1.15;
+  }
+
+  .info-card p {
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .accuracy-note {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1.4rem;
+    padding: 1.1rem 1.3rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 16px;
+    font-size: 0.75rem;
+    line-height: 1.55;
+    color: var(--faint);
+  }
+
+  .accuracy-note p {
+    max-width: 70ch;
+  }
+
+  .accuracy-note span {
+    margin-right: 0.35rem;
+    color: var(--gold);
+  }
+
+  .accuracy-note a {
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+    .accuracy-note {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .chart-hero {
+      padding-top: 7.4rem;
+    }
+  }
+</style>
