@@ -60,7 +60,7 @@ const activeSigns = (element: string) => SIGNS.filter((s) => s.element === eleme
           finds chemistry with other signs. Filter by element or modality to see the pattern.
         </p>
       </div>
-      <SignExplorer client:load />
+      <SignExplorer client:visible />
     </div>
   </section>
 
@@ -252,7 +252,7 @@ const activeSigns = (element: string) => SIGNS.filter((s) => s.element === eleme
     padding: 1.25rem;
     border: 1px solid var(--line-soft);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface);
   }
 
   .modality-index {

@@ -3,6 +3,7 @@ import '@fontsource-variable/space-grotesk';
 import '@fontsource/instrument-serif/400.css';
 import '@fontsource/instrument-serif/400-italic.css';
 import '../styles/global.css';
+import '../styles/theme-light.css';
 
 import { ClientRouter } from 'astro:transitions';
 import Starfield from '../components/Starfield.svelte';
@@ -43,7 +44,30 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#05060d" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('astra-theme') || 'system';
+          const preference = ['system', 'light', 'dark'].includes(stored) ? stored : 'system';
+          const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const resolved =
+            preference === 'light' || preference === 'dark'
+              ? preference
+              : systemDark
+                ? 'dark'
+                : 'light';
+          const root = document.documentElement;
+          root.dataset.theme = resolved;
+          root.dataset.themePref = preference;
+          root.style.colorScheme = resolved;
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', resolved === 'light' ? '#f6f1e8' : '#05060d');
+        } catch {
+          /* localStorage can be unavailable; the CSS defaults to dark. */
+        }
+      })();
+    </script>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -82,7 +106,7 @@ const jsonLd = {
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
-    <Starfield client:load />
+    <Starfield client:idle />
     <Nav />
     <main id="main">
       <slot />
@@ -133,6 +157,71 @@ const jsonLd = {
       if (!window.__astraSiteLoadBound) {
         window.__astraSiteLoadBound = true;
         document.addEventListener('astro:page-load', initSite);
+      }
+
+      function resolveAstraTheme(preference) {
+        if (preference === 'light' || preference === 'dark') return preference;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      function applyAstraTheme(preference, persist) {
+        if (!['system', 'light', 'dark'].includes(preference)) preference = 'system';
+        const resolved = resolveAstraTheme(preference);
+        const root = document.documentElement;
+        root.dataset.theme = resolved;
+        root.dataset.themePref = preference;
+        root.style.colorScheme = resolved;
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', resolved === 'light' ? '#f6f1e8' : '#05060d');
+        document.querySelectorAll('[data-theme-choice]').forEach(function (button) {
+          var active = button.getAttribute('data-theme-choice') === preference;
+          button.setAttribute('aria-pressed', String(active));
+        });
+        if (persist) {
+          try {
+            localStorage.setItem('astra-theme', preference);
+          } catch {
+            /* ignore */
+          }
+        }
+        document.dispatchEvent(
+          new CustomEvent('astra:theme', { detail: { theme: resolved, preference: preference } }),
+        );
+      }
+
+      function initAstraTheme() {
+        let preference = document.documentElement.dataset.themePref || 'system';
+        try {
+          const stored = localStorage.getItem('astra-theme');
+          if (stored) preference = ['system', 'light', 'dark'].includes(stored) ? stored : 'system';
+        } catch {
+          /* ignore */
+        }
+        applyAstraTheme(preference, false);
+        document.querySelectorAll('[data-theme-choice]').forEach(function (button) {
+          if (button.dataset.themeBound === '1') return;
+          button.dataset.themeBound = '1';
+          button.addEventListener('click', function () {
+            applyAstraTheme(button.getAttribute('data-theme-choice') || 'system', true);
+          });
+        });
+      }
+
+      initAstraTheme();
+      if (!window.__astraThemeBound) {
+        window.__astraThemeBound = true;
+        document.addEventListener('astro:page-load', initAstraTheme);
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+        const onChange = function () {
+          let preference = 'system';
+          try {
+            preference = localStorage.getItem('astra-theme') || 'system';
+          } catch {
+            /* ignore */
+          }
+          if (preference === 'system') applyAstraTheme('system', false);
+        };
+        media.addEventListener('change', onChange);
       }
     </script>
   </body>

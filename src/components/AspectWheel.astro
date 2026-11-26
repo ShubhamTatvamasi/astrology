@@ -23,13 +23,17 @@ const top = point(0, R);
         <stop offset="0%" stop-color="rgba(232,196,124,.2)" />
         <stop offset="100%" stop-color="rgba(232,196,124,0)" />
       </radialGradient>
+      <radialGradient id="aspect-disc" cx="48%" cy="44%" r="58%">
+        <stop offset="0%" stop-color="#151229" />
+        <stop offset="68%" stop-color="#0b0c18" />
+        <stop offset="100%" stop-color="#070812" />
+      </radialGradient>
     </defs>
 
+    <circle cx={CX} cy={CY} r="198" fill="url(#aspect-disc)" class="disc" />
     <circle cx={CX} cy={CY} r="198" fill="url(#aspect-core)" />
     <circle cx={CX} cy={CY} r={R} stroke="rgba(255,255,255,.12)" />
     <circle cx={CX} cy={CY} r="120" stroke="rgba(255,255,255,.06)" stroke-dasharray="2 6" />
-    <circle cx={CX} cy={CY} r="5" fill="var(--gold)" />
-
     {ASPECTS.map((aspect, i) => {
       const p = point(aspect.angle, R);
       const label = point(aspect.angle, R + 22);
@@ -70,11 +74,12 @@ const top = point(0, R);
       );
     })}
 
-    <circle cx={top.x} cy={top.y} r="6" fill="var(--gold)" />
+    <circle cx={CX} cy={CY} r="58" fill="rgba(7,8,18,.82)" stroke="rgba(232,196,124,.16)" />
+    <circle cx={CX} cy={CY} r="4" fill="var(--gold)" />
     <text x={CX} y={CY - 14} text-anchor="middle" fill="rgba(237,234,246,.5)" class="center-label">
       THE FIVE
     </text>
-    <text x={CX} y={CY + 6} text-anchor="middle" fill="var(--gold-bright)" class="center-title">
+    <text x={CX} y={CY + 6} text-anchor="middle" fill="#f7e3b0" class="center-title">
       MAJOR ASPECTS
     </text>
   </svg>
@@ -86,6 +91,10 @@ const top = point(0, R);
     max-width: 460px;
     margin-inline: auto;
     animation: float-y 9s ease-in-out infinite;
+  }
+
+  .disc {
+    filter: drop-shadow(0 30px 55px rgba(14, 10, 30, 0.25));
   }
 
   svg {

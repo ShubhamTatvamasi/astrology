@@ -13,6 +13,7 @@ A static astrology web app built with **Astro + Svelte**. It calculates real bir
 - **Zodiac encyclopedia** — all twelve signs with dates, elements, modalities, rulers, strengths, shadow, love, career, friendship, compatibility, and traditional correspondences.
 - **Learn astrology** — planets, signs, houses, aspects, moon phases, methodology, and FAQ.
 - **Sky now** — live moon phase and illumination, current planetary positions, retrogrades, and the degree rising at your location.
+- **Light, dark, or system theme** — system is the default; the choice is remembered locally and applied before first paint to avoid a flash. Chart wheels stay dark so the glyphs remain legible.
 - **Animations** — a drifting starfield with pointer parallax, shooting stars, a rotating cosmic wheel, on-scroll reveals, animated chart wheels and aspect lines, and reduced-motion support.
 - **No account, no database** — chart calculations happen in the browser. Share links encode the birth data in the URL.
 
@@ -115,6 +116,25 @@ src/
   styles/            # global design tokens and utilities
 public/              # favicon, OG image, manifest, robots
 .github/workflows/   # GitHub Pages deployment
+```
+
+---
+
+## Theming
+
+The theme controller is intentionally small and framework-free:
+
+- **Default:** `system` — follows `prefers-color-scheme`, and updates live if the OS changes.
+- **Options:** System, Light, Dark in the navigation (desktop) or the mobile menu.
+- **Persistence:** stored in `localStorage` under `astra-theme`.
+- **No flash:** a tiny inline script in `<head>` resolves the theme before the first paint.
+- **Implementation:** semantic CSS tokens in `src/styles/global.css` plus light overrides in `src/styles/theme-light.css`. Ornamental diagrams keep an opaque night-sky disc in both themes.
+
+Override the theme from the console with:
+
+```js
+localStorage.setItem('astra-theme', 'light'); // or 'dark' or 'system'
+location.reload();
 ```
 
 ---

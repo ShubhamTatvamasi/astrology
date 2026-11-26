@@ -1,0 +1,390 @@
+/* ============================================================
+   Light theme overrides
+   ------------------------------------------------------------
+   The dark theme is the base. These overrides only activate when
+   <html data-theme="light"> is set by the theme controller.
+   ============================================================ */
+
+html[data-theme='light'] body::before {
+  background:
+    radial-gradient(600px 600px at 72% 16%, var(--body-glow-a), transparent 70%),
+    radial-gradient(520px 520px at 16% 78%, var(--body-glow-b), transparent 70%);
+}
+
+html[data-theme='light'] .btn-primary {
+  background: linear-gradient(135deg, #f4e2b4 0%, #e2bd75 48%, #c69a4a 100%);
+  color: #171106;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 14px 34px -16px rgba(122, 79, 16, 0.32);
+}
+
+html[data-theme='light'] .btn-primary:hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 20px 42px -16px rgba(122, 79, 16, 0.4);
+}
+
+html[data-theme='light'] .card {
+  box-shadow: var(--shadow-card);
+}
+
+html[data-theme='light'] .btn-ghost {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+html[data-theme='light'] .chip {
+  background: rgba(27, 24, 48, 0.03);
+}
+
+html[data-theme='light'] .input,
+html[data-theme='light'] .select {
+  background: rgba(27, 24, 48, 0.032);
+}
+
+html[data-theme='light'] .input::placeholder {
+  color: #8a849f;
+}
+
+html[data-theme='light'] .select {
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+}
+
+html[data-theme='light'] .select {
+  background-color: rgba(27, 24, 48, 0.032);
+  background-position:
+    calc(100% - 18px) calc(50% - 2px),
+    calc(100% - 13px) calc(50% - 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* ---------- navigation ---------- */
+
+html[data-theme='light'] .nav-pill {
+  box-shadow: 0 18px 44px -30px rgba(55, 42, 18, 0.45);
+}
+
+html[data-theme='light'] .mobile-menu {
+  box-shadow: 0 30px 60px -30px rgba(55, 42, 18, 0.4);
+}
+
+/* ---------- hero & editorial ---------- */
+
+html[data-theme='light'] .hero-em {
+  background: linear-gradient(105deg, #8a5c17 0%, #a9772c 34%, #8a5c17 66%, #5f3fb8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html[data-theme='light'] .hero-halo {
+  background: radial-gradient(circle, rgba(109, 75, 214, 0.09), transparent 62%);
+}
+
+html[data-theme='light'] .marquee {
+  background: rgba(27, 24, 48, 0.018);
+}
+
+html[data-theme='light'] .sign-card {
+  border-color: var(--line);
+}
+
+html[data-theme='light'] .sign-card:hover {
+  box-shadow: 0 24px 50px -34px color-mix(in srgb, var(--c) 35%, rgba(55, 42, 18, 0.2));
+}
+
+html[data-theme='light'] .cta-card {
+  background:
+    radial-gradient(700px 300px at 20% 0%, rgba(138, 92, 23, 0.1), transparent 65%),
+    radial-gradient(700px 400px at 90% 100%, rgba(109, 75, 214, 0.1), transparent 65%),
+    rgba(255, 255, 255, 0.48);
+  border-color: var(--gold-line);
+}
+
+html[data-theme='light'] .cta-stars {
+  background-image:
+    radial-gradient(1.2px 1.2px at 12% 22%, rgba(138, 92, 23, 0.5), transparent),
+    radial-gradient(1px 1px at 82% 18%, rgba(138, 92, 23, 0.4), transparent),
+    radial-gradient(1.4px 1.4px at 28% 78%, rgba(109, 75, 214, 0.35), transparent),
+    radial-gradient(1px 1px at 68% 68%, rgba(91, 84, 118, 0.4), transparent),
+    radial-gradient(1px 1px at 92% 82%, rgba(138, 92, 23, 0.45), transparent),
+    radial-gradient(1px 1px at 45% 34%, rgba(91, 84, 118, 0.3), transparent);
+}
+
+/* ---------- big three ---------- */
+
+html[data-theme='light'] .form-card {
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.58) 55%),
+    rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme='light'] .sky-strip {
+  background: rgba(255, 252, 246, 0.66);
+}
+
+html[data-theme='light'] .moon-placeholder {
+  background: rgba(27, 24, 48, 0.05);
+}
+
+/* ---------- chart app ---------- */
+
+html[data-theme='light'] .form-shell {
+  background:
+    radial-gradient(600px 200px at 80% 0%, rgba(109, 75, 214, 0.07), transparent 70%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.55) 55%),
+    rgba(255, 255, 255, 0.62);
+}
+
+html[data-theme='light'] .detail-card {
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.55) 55%),
+    rgba(255, 255, 255, 0.6);
+}
+
+html[data-theme='light'] .detail-glyph {
+  background: rgba(27, 24, 48, 0.035);
+}
+
+html[data-theme='light'] .aspect-chip {
+  background: rgba(27, 24, 48, 0.028);
+}
+
+html[data-theme='light'] .aspect-chip:hover {
+  background: rgba(27, 24, 48, 0.055);
+}
+
+html[data-theme='light'] .bar-track {
+  background: rgba(27, 24, 48, 0.08);
+}
+
+html[data-theme='light'] .empty-item {
+  background: rgba(27, 24, 48, 0.025);
+}
+
+html[data-theme='light'] .time-banner {
+  background: rgba(138, 92, 23, 0.06);
+}
+
+html[data-theme='light'] .place-results {
+  background: var(--dropdown-bg);
+  border-color: var(--gold-line);
+  box-shadow: 0 30px 60px -26px rgba(55, 42, 18, 0.35);
+}
+
+html[data-theme='light'] .spinner {
+  border-color: rgba(27, 24, 48, 0.14);
+  border-top-color: var(--gold);
+}
+
+html[data-theme='light'] .checkbox input {
+  background: rgba(27, 24, 48, 0.03);
+}
+
+html[data-theme='light'] .selected-place {
+  background: rgba(138, 92, 23, 0.055);
+}
+
+html[data-theme='light'] .three-glyph {
+  box-shadow: 0 0 28px -12px var(--accent);
+}
+
+/* ---------- sky app ---------- */
+
+html[data-theme='light'] .moon-card {
+  background:
+    radial-gradient(500px 260px at 25% 10%, rgba(138, 92, 23, 0.08), transparent 65%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.6)),
+    rgba(255, 255, 255, 0.62);
+}
+
+html[data-theme='light'] .moon-skeleton {
+  background: rgba(27, 24, 48, 0.05);
+}
+
+html[data-theme='light'] .rising-result div {
+  background: rgba(27, 24, 48, 0.025);
+}
+
+html[data-theme='light'] .skeleton-row td {
+  background: linear-gradient(
+    90deg,
+    rgba(27, 24, 48, 0.025),
+    rgba(27, 24, 48, 0.055),
+    rgba(27, 24, 48, 0.025)
+  );
+  background-size: 200% 100%;
+}
+
+html[data-theme='light'] .retro-chip {
+  background: rgba(168, 60, 91, 0.07);
+}
+
+/* ---------- learn ---------- */
+
+html[data-theme='light'] .learn-nav {
+  background: rgba(27, 24, 48, 0.022);
+}
+
+html[data-theme='light'] .orbit-ring {
+  border-color: rgba(27, 24, 48, 0.12);
+}
+
+html[data-theme='light'] .ring-one {
+  border-color: var(--gold-line);
+}
+
+html[data-theme='light'] .ring-two {
+  border-color: rgba(109, 75, 214, 0.18);
+}
+
+html[data-theme='light'] .orbit-core {
+  background: radial-gradient(circle at 40% 35%, rgba(232, 196, 124, 0.16), rgba(10, 11, 22, 0.94) 65%);
+  border-color: var(--gold-line);
+}
+
+html[data-theme='light'] .core-label {
+  color: rgba(237, 234, 246, 0.55);
+}
+
+html[data-theme='light'] .orbit-chip {
+  background: rgba(255, 252, 246, 0.9);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+html[data-theme='light'] .matrix-cell {
+  background: rgba(255, 255, 255, 0.38);
+}
+
+html[data-theme='light'] .matrix-cell:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+html[data-theme='light'] .planet-glyph {
+  background: rgba(27, 24, 48, 0.035);
+}
+
+html[data-theme='light'] .faq {
+  background: rgba(255, 255, 255, 0.36);
+}
+
+html[data-theme='light'] .source-links a {
+  text-decoration-color: var(--line-strong);
+}
+
+/* ---------- zodiac pages ---------- */
+
+html[data-theme='light'] .modality-card {
+  background: rgba(255, 255, 255, 0.38);
+}
+
+html[data-theme='light'] .cta-inner {
+  background:
+    radial-gradient(500px 220px at 20% 0%, rgba(138, 92, 23, 0.08), transparent 70%),
+    rgba(255, 255, 255, 0.42);
+}
+
+html[data-theme='light'] .tension-row {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+html[data-theme='light'] .tension-item a {
+  text-decoration-color: var(--line-strong);
+}
+
+html[data-theme='light'] .body-card {
+  background: var(--card-bg);
+}
+
+html[data-theme='light'] .sign-nav {
+  border-color: var(--line);
+}
+
+html[data-theme='light'] .compat-card:hover {
+  box-shadow: 0 24px 50px -36px color-mix(in srgb, var(--c) 32%, rgba(55, 42, 18, 0.18));
+}
+
+html[data-theme='light'] .lucky-item strong {
+  color: var(--ink);
+}
+
+html[data-theme='light'] .swatch {
+  border-color: rgba(27, 24, 48, 0.15);
+}
+
+/* ---------- sky page ---------- */
+
+html[data-theme='light'] .sky-hero .hero-orbit {
+  border-color: var(--line);
+}
+
+html[data-theme='light'] .sky-hero .hero-orbit::before,
+html[data-theme='light'] .sky-hero .hero-orbit::after {
+  border-color: var(--line-soft);
+}
+
+html[data-theme='light'] .read-grid {
+  border-color: var(--line);
+}
+
+/* ---------- footer ---------- */
+
+html[data-theme='light'] .site-footer {
+  background: var(--footer-bg);
+}
+
+/* ---------- chart disc & starfield ---------- */
+
+html[data-theme='light'] .starfield {
+  opacity: 0.55;
+}
+
+html[data-theme='light'] .wheel-card {
+  background: var(--card-bg);
+}
+
+html[data-theme='light'] .chart-left,
+html[data-theme='light'] .chart-right {
+  color: var(--ink);
+}
+
+
+/* Keep pastel element accents legible when they sit on a light surface.
+   The dark chart discs use the same inline colours, so only target UI cards. */
+html[data-theme='light'] .sign-card .sign-glyph,
+html[data-theme='light'] .sign-card .top .glyph,
+html[data-theme='light'] .sign-card .tagline,
+html[data-theme='light'] .mini-sign .glyph,
+html[data-theme='light'] .title-glyph,
+html[data-theme='light'] .tagline,
+html[data-theme='light'] .matrix-glyph,
+html[data-theme='light'] .compat-glyph,
+html[data-theme='light'] .planet-icon,
+html[data-theme='light'] .row-glyph,
+html[data-theme='light'] .bar-fill,
+html[data-theme='light'] .aspect-row .aspect-glyph,
+html[data-theme='light'] .aspect-card .aspect-glyph,
+html[data-theme='light'] .aspect-chip .glyph,
+html[data-theme='light'] .planet-card .planet-glyph,
+html[data-theme='light'] .life-glyph,
+html[data-theme='light'] .chart-glyph,
+html[data-theme='light'] .big-glyph,
+html[data-theme='light'] .nav-name .glyph,
+html[data-theme='light'] .element-symbol,
+html[data-theme='light'] .house-sign {
+  filter: brightness(0.68) saturate(1.18);
+}
+
+html[data-theme='light'] .phase-mini span {
+  color: var(--faint);
+  font-size: 0.55rem;
+}
+
+html[data-theme='light'] .theme-switch button[aria-pressed='true'] {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 1px 4px rgba(55, 42, 18, 0.12);
+}

@@ -133,7 +133,7 @@
   }
 
   .filter-group button:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--surface);
     color: var(--ink);
   }
 
@@ -154,7 +154,7 @@
     padding: 3px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.025);
+    background: var(--surface);
   }
 
   .modality-group button {
@@ -188,7 +188,7 @@
     min-height: 300px;
     padding: 1.5rem;
     overflow: hidden;
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--line);
     animation: card-in 0.55s var(--ease) both;
     animation-delay: calc(var(--i) * 35ms);
     transition:

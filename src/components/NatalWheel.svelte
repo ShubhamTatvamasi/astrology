@@ -137,8 +137,14 @@
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
+        <radialGradient id={`wheel-disc-${uid}`} cx="48%" cy="44%" r="58%">
+          <stop offset="0%" stop-color="#151229" />
+          <stop offset="65%" stop-color="#0b0c18" />
+          <stop offset="100%" stop-color="#070812" />
+        </radialGradient>
       </defs>
 
+      <circle cx={CX} cy={CY} r="308" fill={`url(#wheel-disc-${uid})`} class="wheel-disc" />
       <circle cx={CX} cy={CY} r="306" class="deco-ring" />
       <circle cx={CX} cy={CY} r={R_OUTER} class="outer-circle" />
 
@@ -242,7 +248,7 @@
             style={`--i:${item.index}`}
             role="button"
             tabindex="0"
-            aria-label={`${body.name} in ${body.sign.name}${body.retrograde ? ', retrograde' : ''}. View details.`}
+            aria-label={`${body.glyph} ${body.name} in ${body.sign.name}${body.retrograde ? ', retrograde' : ''} ${degreeLabel(body)}. View details.`}
             onclick={() => onSelect(body.key)}
             onkeydown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {
@@ -370,6 +376,10 @@
     width: 100%;
     height: auto;
     overflow: visible;
+  }
+
+  .wheel-disc {
+    filter: drop-shadow(0 28px 55px rgba(10, 7, 24, 0.3));
   }
 
   .deco-ring {

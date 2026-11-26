@@ -290,7 +290,7 @@
       </p>
     </div>
 
-    <div class="table-scroll">
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Current planetary positions">
       <table>
         <thead>
           <tr>
@@ -391,9 +391,8 @@
   .moon-card {
     padding: clamp(1.2rem, 2.6vw, 1.8rem);
     background:
-      radial-gradient(500px 260px at 25% 10%, rgba(232, 196, 124, 0.09), transparent 65%),
-      linear-gradient(155deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.012)),
-      rgba(9, 10, 20, 0.7);
+      radial-gradient(500px 260px at 25% 10%, var(--gold-tint), transparent 65%),
+      var(--card-bg);
   }
 
   .moon-top {
@@ -411,7 +410,7 @@
     width: 100%;
     aspect-ratio: 1;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--surface);
     animation: pulse 1.8s ease-in-out infinite;
   }
 
@@ -519,8 +518,8 @@
   }
 
   .phase-mini span {
-    font-size: 0.49rem;
-    letter-spacing: 0.06em;
+    font-size: 0.55rem;
+    letter-spacing: 0.05em;
     text-align: center;
     color: var(--faint);
     line-height: 1.2;
@@ -612,7 +611,7 @@
     padding: 0.55rem 0.65rem;
     border: 1px solid var(--line-soft);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface);
   }
 
   .rising-label {
@@ -757,7 +756,7 @@
 
   .skeleton-row td {
     height: 2.4rem;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    background: linear-gradient(90deg, var(--surface), var(--surface-strong), var(--surface));
     background-size: 200% 100%;
     animation: shimmer 1.5s linear infinite;
     border-bottom: 1px solid var(--line-soft);

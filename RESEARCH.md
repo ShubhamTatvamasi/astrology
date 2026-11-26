@@ -235,6 +235,7 @@ Retrograde copy follows the modern reflective interpretation rather than the “
 - Scroll reveals with IntersectionObserver and staggered delays.
 - Card radial spotlight following the pointer (CSS variables `--mx`/`--my`).
 - Page transitions via Astro’s `<ClientRouter />`.
+- Theme switching: three states (system, light, dark). System is the default and follows `prefers-color-scheme`; the resolved theme is written to `<html data-theme>` before first paint, stored under `astra-theme`, and reflected in the `theme-color` meta tag. The starfield switches from stars to warm dust in light mode. Chart wheels, sign sigils, the aspect diagram, and the moon stay on an opaque night-sky disc for legibility.
 - All animation respects reduced motion; interactive controls remain static and usable.
 
 ### 5.3 Accessibility
@@ -311,3 +312,7 @@ Platform:
 - [x] Mobile menu, form, results, and chart wheel usable at 390 px.
 - [x] `npm run check`, `npm run build`, and sitemap generation pass.
 - [x] Reduced-motion media query disables non-essential motion.
+- [x] System theme follows the OS and responds to live `prefers-color-scheme` changes.
+- [x] Light/dark preference survives reloads and client-side navigation.
+- [x] No theme flash on first paint when a preference is stored.
+- [x] Axe (WCAG 2.0/2.1 A/AA + best practice) is clean on every route in both themes.

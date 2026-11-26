@@ -63,8 +63,14 @@ const lines = [
       <filter id={`sigil-glow-${sign.slug}`} x="-70%" y="-70%" width="240%" height="240%">
         <feGaussianBlur stdDeviation="6" />
       </filter>
+      <radialGradient id={`sigil-disc-${sign.slug}`} cx="50%" cy="44%" r="56%">
+        <stop offset="0%" stop-color="#16132b" />
+        <stop offset="65%" stop-color="#0c0d1a" />
+        <stop offset="100%" stop-color="#070812" />
+      </radialGradient>
     </defs>
 
+    <circle cx="220" cy="220" r="210" fill={`url(#sigil-disc-${sign.slug})`} class="disc" />
     <circle cx="220" cy="220" r="210" fill={`url(#sigil-bg-${sign.slug})`} />
     <circle cx="220" cy="220" r="206" stroke="rgba(255,255,255,.07)" stroke-dasharray="1 8" class="spin-slow" />
     <circle cx="220" cy="220" r="188" stroke="rgba(255,255,255,.09)" />
@@ -137,6 +143,10 @@ const lines = [
     background: radial-gradient(circle, color-mix(in srgb, var(--c) 30%, transparent), transparent 68%);
     filter: blur(42px);
     animation: aura-pulse 8s ease-in-out infinite;
+  }
+
+  .disc {
+    filter: drop-shadow(0 30px 55px rgba(18, 13, 35, 0.3));
   }
 
   svg {

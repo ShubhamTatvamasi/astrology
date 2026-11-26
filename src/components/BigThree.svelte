@@ -185,9 +185,7 @@
     overflow: visible;
     position: relative;
     z-index: 2;
-    background:
-      linear-gradient(155deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 55%),
-      rgba(9, 10, 20, 0.72);
+    background: var(--card-bg);
     border-radius: 26px;
     padding: clamp(1.2rem, 3vw, 2rem);
   }

@@ -392,7 +392,7 @@
     height: 18px;
     border: 1px solid var(--line);
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--surface);
     display: grid;
     place-items: center;
     transition: background 0.2s ease, border-color 0.2s ease;
@@ -467,7 +467,7 @@
     width: 15px;
     height: 15px;
     margin-top: -7.5px;
-    border: 1.5px solid rgba(255, 255, 255, 0.16);
+    border: 1.5px solid var(--line-strong);
     border-top-color: var(--gold);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
@@ -490,7 +490,7 @@
     padding: 0.4rem;
     border: 1px solid rgba(232, 196, 124, 0.2);
     border-radius: 16px;
-    background: rgba(9, 10, 20, 0.97);
+    background: var(--dropdown-bg);
     backdrop-filter: blur(20px);
     box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
   }

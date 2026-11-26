@@ -9,6 +9,8 @@
     if (!ctx) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const root = document.documentElement;
+    let light = root.dataset.theme === 'light';
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
     let width = 0;
     let height = 0;
@@ -40,13 +42,21 @@
     let stars: Star[] = [];
     let meteors: Meteor[] = [];
 
-    const palette = [
+    const darkPalette = [
       '255, 255, 255',
       '255, 244, 216',
       '232, 196, 124',
       '201, 184, 255',
       '159, 199, 255',
     ];
+    const lightPalette = [
+      '138, 92, 23',
+      '109, 75, 214',
+      '47, 91, 160',
+      '91, 84, 118',
+      '111, 74, 16',
+    ];
+    const palette = () => (light ? lightPalette : darkPalette);
 
     function build() {
       const area = width * height;
@@ -58,10 +68,10 @@
           y: Math.random() * height,
           z,
           r: (0.35 + Math.random() * 1.25) * z,
-          base: 0.18 + Math.random() * 0.6,
+          base: (light ? 0.1 : 0.18) + Math.random() * (light ? 0.34 : 0.6),
           phase: Math.random() * Math.PI * 2,
           speed: 0.15 + Math.random() * 0.5,
-          color: palette[Math.floor(Math.random() * palette.length)]!,
+          color: palette()[Math.floor(Math.random() * palette().length)]!,
         };
       });
     }
@@ -114,8 +124,9 @@
           const tailX = m.x - m.vx * 0.09;
           const tailY = m.y - m.vy * 0.09;
           const gradient = ctx!.createLinearGradient(m.x, m.y, tailX, tailY);
-          gradient.addColorStop(0, `rgba(255, 244, 216, ${alpha})`);
-          gradient.addColorStop(1, 'rgba(255, 244, 216, 0)');
+          const meteorColor = light ? '138, 92, 23' : '255, 244, 216';
+          gradient.addColorStop(0, `rgba(${meteorColor}, ${alpha})`);
+          gradient.addColorStop(1, `rgba(${meteorColor}, 0)`);
           ctx!.strokeStyle = gradient;
           ctx!.lineWidth = 1.4;
           ctx!.beginPath();
@@ -162,9 +173,16 @@
       pointer.ty = (event.clientY / Math.max(height, 1) - 0.5) * 2;
     }
 
+    function onTheme(event) {
+      light = event.detail?.theme === 'light' || root.dataset.theme === 'light';
+      build();
+      if (reduced) draw(0);
+    }
+
     const onResize = () => resize();
     window.addEventListener('resize', onResize, { passive: true });
     window.addEventListener('pointermove', onPointerMove, { passive: true });
+    document.addEventListener('astra:theme', onTheme);
     resize();
     if (!reduced) raf = requestAnimationFrame(frame);
 
@@ -172,6 +190,7 @@
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('astra:theme', onTheme);
     };
   });
 </script>

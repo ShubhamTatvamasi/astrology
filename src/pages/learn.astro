@@ -513,7 +513,7 @@ const faqs = [
   .orbit-ring {
     position: absolute;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    border: 1px solid var(--line);
   }
 
   .ring-one {
@@ -537,7 +537,7 @@ const faqs = [
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: radial-gradient(circle at 40% 35%, rgba(232, 196, 124, 0.16), rgba(10, 11, 22, 0.9) 65%);
+    background: radial-gradient(circle at 40% 35%, rgba(232, 196, 124, 0.16), #0a0b16 65%);
     border: 1px solid rgba(232, 196, 124, 0.28);
     box-shadow: 0 0 70px -16px rgba(232, 196, 124, 0.4);
     animation: breathe 7s ease-in-out infinite;
@@ -563,7 +563,7 @@ const faqs = [
     padding: 0.35rem 0.7rem;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: rgba(9, 10, 20, 0.82);
+    background: var(--nav-menu-bg);
     font-size: 0.68rem;
     letter-spacing: 0.06em;
     color: var(--muted);
@@ -634,7 +634,7 @@ const faqs = [
     padding: 0.4rem;
     border: 1px solid var(--line-soft);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface);
     width: fit-content;
     max-width: 100%;
     margin-top: 1rem;
@@ -738,7 +738,7 @@ const faqs = [
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.035);
+    background: var(--surface);
     border: 1px solid var(--line);
     font-size: 1.3rem;
     flex-shrink: 0;
@@ -833,7 +833,7 @@ const faqs = [
     padding: 0.85rem;
     border: 1px solid var(--line-soft);
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.018);
+    background: var(--surface);
     transition: border-color 0.25s ease, background 0.25s ease, transform 0.3s var(--ease);
   }
 
@@ -1175,7 +1175,7 @@ const faqs = [
     padding: 1.3rem;
     border: 1px solid var(--line);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface);
   }
 
   .faq-title {
@@ -1254,7 +1254,7 @@ const faqs = [
     font-size: 0.72rem;
     color: var(--muted);
     text-decoration: underline;
-    text-decoration-color: rgba(255, 255, 255, 0.15);
+    text-decoration-color: var(--line-strong);
     text-underline-offset: 3px;
     transition: color 0.2s ease;
   }

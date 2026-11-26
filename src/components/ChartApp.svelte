@@ -331,7 +331,7 @@
               <p class="panel-title">Placements</p>
               <span class="panel-hint">Tap a row</span>
             </div>
-            <div class="table-scroll">
+            <div class="table-scroll" tabindex="0" role="region" aria-label="Planet placements">
               <table>
                 <thead>
                   <tr>
@@ -347,7 +347,6 @@
                       class:active={position.key === selectedKey}
                       tabindex="0"
                       role="button"
-                      aria-label={`${position.name} in ${position.sign.name}, ${ordinal(position.house)} house. View details.`}
                       onclick={() => (selectedKey = position.key)}
                       onkeydown={(event) => {
                         if (event.key === 'Enter' || event.key === ' ') {
@@ -365,7 +364,10 @@
                         <span class="sign-cell">{position.sign.glyph} {position.sign.name}</span>
                       </td>
                       <td class="num">{position.degreeText}</td>
-                      <td class="num">{position.house}</td>
+                      <td class="num">
+                        {position.house}
+                        <span class="sr-only">. View details</span>
+                      </td>
                     </tr>
                   {/each}
                 </tbody>
@@ -444,9 +446,8 @@
     z-index: 3;
     padding: clamp(1.2rem, 3vw, 2rem);
     background:
-      radial-gradient(600px 200px at 80% 0%, rgba(139, 108, 246, 0.1), transparent 70%),
-      linear-gradient(155deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.015) 55%),
-      rgba(9, 10, 20, 0.74);
+      radial-gradient(600px 200px at 80% 0%, var(--glow-violet), transparent 70%),
+      var(--card-bg);
   }
 
   .form-head {
@@ -556,9 +557,7 @@
 
   .detail-card {
     padding: clamp(1.1rem, 2.4vw, 1.6rem);
-    background:
-      linear-gradient(155deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.012) 55%),
-      rgba(9, 10, 20, 0.72);
+    background: var(--card-bg);
   }
 
   .detail-head {
@@ -576,7 +575,7 @@
     flex-shrink: 0;
     border-radius: 50%;
     font-size: 1.65rem;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--surface);
     border: 1px solid var(--line);
   }
 
@@ -674,7 +673,7 @@
     padding: 0.35rem 0.6rem;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.025);
+    background: var(--surface);
     font-size: 0.68rem;
     color: var(--muted);
     transition: border-color 0.2s ease, background 0.2s ease;
@@ -682,7 +681,7 @@
 
   .aspect-chip:hover {
     border-color: color-mix(in srgb, var(--c) 50%, transparent);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface-strong);
   }
 
   .aspect-chip .glyph {
@@ -792,7 +791,7 @@
   .bar-track {
     height: 4px;
     border-radius: 99px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--surface-strong);
     overflow: hidden;
   }
 
@@ -930,7 +929,7 @@
 
   .aspect-row:hover {
     color: var(--ink);
-    background: rgba(255, 255, 255, 0.025);
+    background: var(--surface);
   }
 
   .aspect-row:last-child {
@@ -985,7 +984,7 @@
     padding: 1rem;
     border: 1px solid var(--line-soft);
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface);
   }
 
   .empty-glyph {

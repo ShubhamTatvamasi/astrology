@@ -114,7 +114,7 @@
     gap: 1.4rem;
     padding: 0.85rem 1rem 0.85rem 1.15rem;
     border-radius: 20px;
-    background: rgba(9, 10, 20, 0.56);
+    background: var(--glass-bg);
   }
 
   .live {
@@ -163,7 +163,7 @@
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface-strong);
     flex-shrink: 0;
   }
 
